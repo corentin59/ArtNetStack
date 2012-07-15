@@ -8,18 +8,7 @@ package fr.azelart.artnetstack.packets;
  * @author Corentin Azelart
  *
  */
-public class ArtPollPacket {
-
-	/** 
-	 * Array of 8 characters, the final character is a null termination.
-	 */
-	private static char[] id = {'A','r','t','-','N','e','t', 0x00};
-	
-	/**
-	 * The OpCode defines the class of data following ArtPoll within this UDP packet.
-	 * Transmitted low byte first. See Table 1 for the OpCode listing.
-	 */
-	private int opCode;
+public class ArtPollPacket extends ArtNetPacket implements ArtNetPacketImp {
 	
 	/**
 	 * High byte of the Art-Net protocol revision number.
@@ -43,34 +32,6 @@ public class ArtPollPacket {
 	 * be sent. See Table 5.
 	 */
 	private int priority;
-
-	/**
-	 * @return the id
-	 */
-	public static char[] getId() {
-		return id;
-	}
-
-	/**
-	 * @param id the id to set
-	 */
-	public static void setId(char[] id) {
-		ArtPollPacket.id = id;
-	}
-
-	/**
-	 * @return the opCode
-	 */
-	public int getOpCode() {
-		return opCode;
-	}
-
-	/**
-	 * @param opCode the opCode to set
-	 */
-	public void setOpCode(int opCode) {
-		this.opCode = opCode;
-	}
 
 	/**
 	 * @return the protVerHi
