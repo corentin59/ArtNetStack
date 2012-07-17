@@ -16,6 +16,9 @@ public final class Constantes {
 	/** Server port for humans */
 	public final static short SERVER_PORT_HUMANS = 1936;
 	
+	/** IP Adress. */
+	public final static String SERVER_IP = "192.168.1.10";
+	
 	/** Version 14. */
 	public final static int ART_NET_VERSION = 14;
 	
@@ -33,5 +36,8 @@ public final class Constantes {
 	
 	/** Long Name. */
 	public final static String LONG_NAME = "ArtNetStack 1.001 - More Informations : corentin@azelart.fr";
+	
+	/** Max Ports (4 in protocol specification) */
+	public final static int MAX_PORT = 4;
 	
 }

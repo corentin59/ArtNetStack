@@ -9,11 +9,10 @@ import java.net.UnknownHostException;
 import java.util.ArrayList;
 
 import fr.azelart.artnetstack.constants.Constantes;
-import fr.azelart.artnetstack.constants.OpCodeConstants;
+import fr.azelart.artnetstack.domain.artnet.ArtNetObject;
+import fr.azelart.artnetstack.domain.artpoll.ArtPoll;
 import fr.azelart.artnetstack.listeners.ArtNetPacketListener;
 import fr.azelart.artnetstack.listeners.ServerListener;
-import fr.azelart.artnetstack.packets.ArtNetPacket;
-import fr.azelart.artnetstack.packets.ArtPollPacket;
 import fr.azelart.artnetstack.utils.ArtNetPacketDecoder;
 
 public class ArtNetServer extends Thread implements Runnable {
@@ -55,13 +54,13 @@ public class ArtNetServer extends Thread implements Runnable {
 			inputDatagramPacket = new DatagramPacket(inputBuffer, inputBuffer.length);
 			try {
 				datagramSocket.receive( inputDatagramPacket );
-				final ArtNetPacket vArtNetPacket = ArtNetPacketDecoder.decodeArtNetPacket( inputDatagramPacket.getData() );
+				final ArtNetObject vArtNetObject = ArtNetPacketDecoder.decodeArtNetPacket( inputDatagramPacket.getData() );
 				
 				// It's realy an artnet packet.
-				if ( vArtNetPacket != null ) {
+				if ( vArtNetObject != null ) {
 					// ArtPollPacket
-					if ( vArtNetPacket instanceof ArtPollPacket ) {
-						fireArtPollPacket( (ArtPollPacket) vArtNetPacket );
+					if ( vArtNetObject instanceof ArtPoll ) {
+						fireArtPoll( (ArtPoll) vArtNetObject );
 					}
 				}
 				
@@ -99,7 +98,7 @@ public class ArtNetServer extends Thread implements Runnable {
 	}
 
 	/**
-	 * We add an listener.
+	 * We add a listener.
 	 * @param artNetPacketListener
 	 */
 	public void addListenerPacket( ArtNetPacketListener artNetPacketListener ) {
@@ -110,9 +109,9 @@ public class ArtNetServer extends Thread implements Runnable {
 	 * A new ArtPollPacket incomming.
 	 * @param artPollPacket is the instance of the artPollPacket
 	 */
-	public void fireArtPollPacket( ArtPollPacket artPollPacket ) {
+	public void fireArtPoll( ArtPoll artPoll ) {
 		for ( ArtNetPacketListener listener : this.listenersListPacket ) {
-			listener.onArtPollPacket( artPollPacket );
+			listener.onArtPoll( artPoll );
 		}
 	}
 }

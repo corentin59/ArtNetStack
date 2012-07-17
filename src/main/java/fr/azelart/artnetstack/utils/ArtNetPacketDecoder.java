@@ -5,9 +5,9 @@ package fr.azelart.artnetstack.utils;
 
 import fr.azelart.artnetstack.constants.Constantes;
 import fr.azelart.artnetstack.constants.OpCodeConstants;
-import fr.azelart.artnetstack.exceptions.WrongVersionException;
-import fr.azelart.artnetstack.packets.ArtNetPacket;
-import fr.azelart.artnetstack.packets.ArtPollPacket;
+import fr.azelart.artnetstack.domain.artnet.ArtNetObject;
+import fr.azelart.artnetstack.domain.artpoll.ArtPoll;
+import fr.azelart.artnetstack.domain.arttimecode.ArtTimeCode;
 
 /**
  * ArtNetPacket decoder.
@@ -15,10 +15,10 @@ import fr.azelart.artnetstack.packets.ArtPollPacket;
  */
 public class ArtNetPacketDecoder {
 
-	public static ArtNetPacket decodeArtNetPacket( byte[] packet ) {
+	public static ArtNetObject decodeArtNetPacket( byte[] packet ) {
 		
 		// The ArtNetPacket.
-		ArtNetPacket artNetPacket = null;
+		ArtNetObject artNetObject = null;
 		
 		// Set generals infos
 		final String hexaBrut = byteArrayToHex( packet );
@@ -26,10 +26,8 @@ public class ArtNetPacketDecoder {
 		final String opCode = hexaBrut.substring(16, 20);
 		
 		// Yes, it's a ArtNetPacket
-		if ( "Art-Net".equals( id ) ) {
-			artNetPacket = new ArtNetPacket();
-			artNetPacket.setId( id );
-			artNetPacket.setOpCode( opCode );
+		if ( !"Art-Net".equals( id ) || !checkVersion( packet, hexaBrut ) ) {
+			return null; 
 		}
 
 		/*
@@ -38,10 +36,22 @@ public class ArtNetPacketDecoder {
 		 */
 		if ( OpCodeConstants.OPPOLL.equals( opCode ) ) {
 			// ArtPollPacket : This is an ArtPoll packet, no other data is contained in this UDP packet
-			return decodeArtPollPacket( artNetPacket, packet, hexaBrut );
+			return decodeArtPollPacket( packet, hexaBrut );
+		} else if ( OpCodeConstants.OPTIMECODE.equals( opCode ) ) {
+			// ArtTimePacket : OpTimeCode This is an ArtTimeCode packet. It is used to transport time code over the network.
+			return decodeArtTimeCodePacket( packet, hexaBrut );
 		}
 
-		return artNetPacket;
+		return artNetObject;
+	}
+	
+	/**
+	 * Decode an artTimeCodePacket.
+	 * @param packet is the packet data
+	 * @return the ArtPollPacketObject
+	 */
+	private static ArtTimeCode decodeArtTimeCodePacket( byte[] bytes, String hexaBrut ) {
+		return new ArtTimeCode();
 	}
 	
 	/**
@@ -49,18 +59,8 @@ public class ArtNetPacketDecoder {
 	 * @param packet is the packet data
 	 * @return the ArtPollPacketObject
 	 */
-	private static ArtPollPacket decodeArtPollPacket( ArtNetPacket packet, byte[] bytes, String hexaBrut ) {
-		// Transform in ArtPollPacket.
-		final ArtPollPacket artPollPacket = new ArtPollPacket();	
-		artPollPacket.setId( packet.getId() );
-		artPollPacket.setOpCode( packet.getOpCode() );
-		
-		// Check version, if wrong we ignore packet
-		if (!checkVersion( bytes, hexaBrut )) {
-			artPollPacket.setProtVerLo( (int) bytes[11] );
-		}
-		
-		return artPollPacket;
+	private static ArtPoll decodeArtPollPacket( byte[] bytes, String hexaBrut ) {	
+		return new ArtPoll();
 	}
 	
 	/**

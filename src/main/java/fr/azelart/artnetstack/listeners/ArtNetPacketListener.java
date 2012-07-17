@@ -5,7 +5,7 @@ package fr.azelart.artnetstack.listeners;
 
 import java.util.EventListener;
 
-import fr.azelart.artnetstack.packets.ArtPollPacket;
+import fr.azelart.artnetstack.domain.artpoll.ArtPoll;
 
 /**
  * The list of availables methods on recept ArtNetPacket.
@@ -15,8 +15,8 @@ public interface ArtNetPacketListener extends EventListener {
 
 	/**
 	 * We have receive an ArtPollPacket.
-	 * @param artPollPacket is the artpollpacket.
+	 * @param artPoll is the artpollpacket.
 	 */
-	void onArtPollPacket( ArtPollPacket artPollPacket );
+	void onArtPoll( ArtPoll artPoll );
 	
 }
