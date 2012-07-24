@@ -1,5 +1,17 @@
-/**
- * 
+/*
+ * Copyright 2012 Corentin Azelart.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package fr.azelart.artnetstack.runners;
 
@@ -8,10 +20,9 @@ import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Timer;
 
 import fr.azelart.artnetstack.domain.artpoll.ArtPoll;
-import fr.azelart.artnetstack.domain.arttimecode.ArtTimeCodeType;
+import fr.azelart.artnetstack.domain.arttimecode.ArtTimeCode;
 import fr.azelart.artnetstack.domain.controller.Controller;
 import fr.azelart.artnetstack.domain.controller.ControllerController;
 import fr.azelart.artnetstack.domain.controller.ControllerGoodInput;
@@ -22,7 +33,6 @@ import fr.azelart.artnetstack.domain.enums.PortTypeEnum;
 import fr.azelart.artnetstack.listeners.ArtNetPacketListener;
 import fr.azelart.artnetstack.listeners.ServerListener;
 import fr.azelart.artnetstack.server.ArtNetServer;
-import fr.azelart.artnetstack.tools.timecode.TimeCodeTask;
 import fr.azelart.artnetstack.utils.ArtNetPacketEncoder;
 
 /**
@@ -103,20 +113,25 @@ public class ServerStart {
 			artNetServer.addListenerPacket( new ArtNetPacketListener() {
 				
 
-
+				/**
+				 * We receive an ArtPoll packet.
+				 */
 				public void onArtPoll(ArtPoll artPoll) {
 					try {
 						artNetServer.sendPacket( ArtNetPacketEncoder.encodeArtPollReplyPacket( thisControler ) );
 					} catch (IOException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 				}
-				
+
+				/**
+				 * We receive an ArtTimeCode packet.
+				 */
+				public void onArtTimeCode(ArtTimeCode artTimeCode) {
+					System.out.println(artTimeCode);
+				}
 				
 			} );
-			
-			
 			
 			artNetServer.start();
 			
@@ -124,8 +139,10 @@ public class ServerStart {
 			/**
 			 * Configure a time code for example.
 			 */
+			/*
 			final Timer timer = new Timer();
 			timer.scheduleAtFixedRate(new TimeCodeTask(artNetServer, ArtTimeCodeType.SMPTE), 0, 1000);
+			*/
 			
 			
 		} catch (SocketException e) {

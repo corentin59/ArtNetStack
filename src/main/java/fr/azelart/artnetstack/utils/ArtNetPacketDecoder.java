@@ -1,13 +1,26 @@
-/**
- * 
+/*
+ * Copyright 2012 Corentin Azelart.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package fr.azelart.artnetstack.utils;
 
-import fr.azelart.artnetstack.constants.Constantes;
+import fr.azelart.artnetstack.constants.Constants;
 import fr.azelart.artnetstack.constants.OpCodeConstants;
 import fr.azelart.artnetstack.domain.artnet.ArtNetObject;
 import fr.azelart.artnetstack.domain.artpoll.ArtPoll;
 import fr.azelart.artnetstack.domain.arttimecode.ArtTimeCode;
+import fr.azelart.artnetstack.domain.arttimecode.ArtTimeCodeType;
 
 /**
  * ArtNetPacket decoder.
@@ -50,8 +63,25 @@ public class ArtNetPacketDecoder {
 	 * @param packet is the packet data
 	 * @return the ArtPollPacketObject
 	 */
-	private static ArtTimeCode decodeArtTimeCodePacket( byte[] bytes, String hexaBrut ) {
-		return new ArtTimeCode();
+	private static ArtTimeCode decodeArtTimeCodePacket( byte[] bytes, String hexaBrut ) {		
+		final ArtTimeCode artTimeCode = new ArtTimeCode();
+		artTimeCode.setFrameTime( (int) bytes[14] );
+		artTimeCode.setSeconds( (int) bytes[15] );
+		artTimeCode.setMinutes( (int) bytes[16] );
+		artTimeCode.setHours( (int) bytes[17] );
+		final int typeTimecode = (int) bytes[18];
+		
+		if ( typeTimecode == 0 ) {
+			artTimeCode.setArtTimeCodeType( ArtTimeCodeType.FILM );
+		} else if ( typeTimecode == 1 ) {
+			artTimeCode.setArtTimeCodeType( ArtTimeCodeType.EBU );
+		} else if ( typeTimecode == 2 ) {
+			artTimeCode.setArtTimeCodeType( ArtTimeCodeType.DF );
+		} else if ( typeTimecode == 3 ) {
+			artTimeCode.setArtTimeCodeType( ArtTimeCodeType.SMPTE );
+		}
+		
+		return artTimeCode;
 	}
 	
 	/**
@@ -69,7 +99,7 @@ public class ArtNetPacketDecoder {
 	 */
 	private static boolean checkVersion( byte[] packet, String hexaBrut ) {
 		final int version = (int) packet[11];
-		return ( version >= Constantes.ART_NET_VERSION );
+		return ( version >= Constants.ART_NET_VERSION );
 	}
 
 	/**
@@ -77,8 +107,7 @@ public class ArtNetPacketDecoder {
 	 * @param barray is the byte array.
 	 * @return the String in hexa value
 	 */
-	private static String byteArrayToHex(byte[] barray)
-	{
+	private static String byteArrayToHex(byte[] barray) {
 	    char[] c = new char[barray.length * 2];
 	    byte b;
 	    for (int i = 0; i < barray.length; ++i)
@@ -91,6 +120,5 @@ public class ArtNetPacketDecoder {
 
 	    return new String(c);
 	}
-	
 	
 }

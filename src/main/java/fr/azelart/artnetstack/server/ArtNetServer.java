@@ -1,3 +1,18 @@
+/*
+ * Copyright 2012 Corentin Azelart.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package fr.azelart.artnetstack.server;
 
 import java.io.IOException;
@@ -7,111 +22,136 @@ import java.net.InetAddress;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.List;
 
-import fr.azelart.artnetstack.constants.Constantes;
+import fr.azelart.artnetstack.constants.Constants;
 import fr.azelart.artnetstack.domain.artnet.ArtNetObject;
 import fr.azelart.artnetstack.domain.artpoll.ArtPoll;
+import fr.azelart.artnetstack.domain.arttimecode.ArtTimeCode;
 import fr.azelart.artnetstack.listeners.ArtNetPacketListener;
 import fr.azelart.artnetstack.listeners.ServerListener;
 import fr.azelart.artnetstack.utils.ArtNetPacketDecoder;
 
+/**
+ * A Thread for the server.
+ * @author Corentin Azelart.
+ *
+ */
 public class ArtNetServer extends Thread implements Runnable {
 	
-	private DatagramSocket datagramSocket;
-	
 	/**
-	 * List of observator.
+	 * Socket communication.
 	 */
-	private ArrayList<ArtNetPacketListener> listenersListPacket;
-	
-	private ArrayList<ServerListener> listenersListServer;
-	
+	private DatagramSocket datagramSocket;
+
+	/**
+	 * Listeners for packets.
+	 */
+	private List<ArtNetPacketListener> listenersListPacket;
+
+	/**
+	 * Listeners for server.
+	 */
+	private List<ServerListener> listenersListServer;
+
 	/**
 	 * Constructor of server.
-	 * @throws SocketException
-	 * @throws UnknownHostException 
+	 * @throws SocketException if socket error
+	 * @throws UnknownHostException if we can't find the host.
 	 */
 	public ArtNetServer() throws SocketException, UnknownHostException {
 		listenersListPacket = new ArrayList<ArtNetPacketListener>();
 		listenersListServer = new ArrayList<ServerListener>();
-		datagramSocket = new DatagramSocket( Constantes.SERVER_PORT );
+		datagramSocket = new DatagramSocket(Constants.SERVER_PORT);
 	}
 
-	/** 
+	/**
 	 * Server execution.
 	 */
 	public void run() {
 		// Define inputDatagramPacket
 		DatagramPacket inputDatagramPacket = null;
-		
+
 		// Define input byte buffer
 		byte[] inputBuffer = new byte[1024];
-		
+
 		// We inform than server is ready
 		fireServerConnect();
-		
-		while(true) {
+
+		while (true) {
 			inputDatagramPacket = new DatagramPacket(inputBuffer, inputBuffer.length);
 			try {
-				datagramSocket.receive( inputDatagramPacket );
-				final ArtNetObject vArtNetObject = ArtNetPacketDecoder.decodeArtNetPacket( inputDatagramPacket.getData() );
+				datagramSocket.receive(inputDatagramPacket);
+				final ArtNetObject vArtNetObject = ArtNetPacketDecoder.decodeArtNetPacket(inputDatagramPacket.getData());
 				
 				// It's realy an artnet packet.
-				if ( vArtNetObject != null ) {
+				if (vArtNetObject != null) {
 					// ArtPollPacket
-					if ( vArtNetObject instanceof ArtPoll ) {
-						fireArtPoll( (ArtPoll) vArtNetObject );
+					if (vArtNetObject instanceof ArtPoll) {
+						fireArtPoll((ArtPoll) vArtNetObject);
+					} else if (vArtNetObject instanceof ArtTimeCode) {
+						// ArtTimeCodePacket
+						fireArtTimeCode((ArtTimeCode) vArtNetObject);
 					}
 				}
-				
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
 	}
-	
+
 	/**
 	 * Send a packet.
 	 * @throws IOException
 	 */
-	public void sendPacket(  byte[] bytes ) throws IOException {
-		final DatagramPacket packet = new DatagramPacket(bytes, bytes.length, InetAddress.getByName("192.168.1.255"), Constantes.SERVER_PORT);
+	public final void sendPacket(  byte[] bytes ) throws IOException {
+		final DatagramPacket packet = new DatagramPacket(bytes, bytes.length, InetAddress.getByName(Constants.SERVER_IP_BROADCAST), Constants.SERVER_PORT);
 		datagramSocket.send( packet );
 	}
-	
+
 	/**
 	 * We add an listener.
 	 * @param artNetPacketListener
 	 */
-	public void addListenerServer( ServerListener serverListener ) {
-		this.listenersListServer.add( serverListener );
+	public final void addListenerServer( final ServerListener serverListener ) {
+		this.listenersListServer.add(serverListener);
 	}
-	
+
 	/**
 	 * Server is connected.
 	 */
-	public void fireServerConnect() {
-		for ( ServerListener listener : this.listenersListServer ) {
+	public final void fireServerConnect() {
+		for (ServerListener listener : this.listenersListServer) {
 			listener.onConnect();
 		}
 	}
 
 	/**
 	 * We add a listener.
-	 * @param artNetPacketListener
+	 * @param artNetPacketListener is the artnet packet.
 	 */
-	public void addListenerPacket( ArtNetPacketListener artNetPacketListener ) {
-		this.listenersListPacket.add( artNetPacketListener );
+	public final void addListenerPacket(final ArtNetPacketListener artNetPacketListener) {
+		this.listenersListPacket.add(artNetPacketListener);
 	}
-	
+
 	/**
 	 * A new ArtPollPacket incomming.
-	 * @param artPollPacket is the instance of the artPollPacket
+	 * @param artPoll is the artPollPacket
 	 */
-	public void fireArtPoll( ArtPoll artPoll ) {
-		for ( ArtNetPacketListener listener : this.listenersListPacket ) {
-			listener.onArtPoll( artPoll );
+	public final void fireArtPoll(final ArtPoll artPoll) {
+		for (ArtNetPacketListener listener : this.listenersListPacket) {
+			listener.onArtPoll(artPoll);
+		}
+	}
+
+	/**
+	 * A new ArtTimeCode incomming.
+	 * @param artTimeCode is the instance of the artTimeCodePacket
+	 */
+	public final void fireArtTimeCode(final ArtTimeCode artTimeCode) {
+		for (ArtNetPacketListener listener : this.listenersListPacket) {
+			listener.onArtTimeCode(artTimeCode);
 		}
 	}
 }

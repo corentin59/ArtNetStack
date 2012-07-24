@@ -1,5 +1,17 @@
-/**
- * 
+/*
+ * Copyright 2012 Corentin Azelart.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package fr.azelart.artnetstack.utils;
 
@@ -9,7 +21,7 @@ import java.net.InetAddress;
 import java.util.BitSet;
 import java.util.Map;
 
-import fr.azelart.artnetstack.constants.Constantes;
+import fr.azelart.artnetstack.constants.Constants;
 import fr.azelart.artnetstack.constants.MagicNumbers;
 import fr.azelart.artnetstack.domain.arttimecode.ArtTimeCode;
 import fr.azelart.artnetstack.domain.controller.Controller;
@@ -35,35 +47,41 @@ public final class ArtNetPacketEncoder {
 	 */
 	public static byte[] encodeArtPollPacket( Controller pControler ) throws IOException {
 		final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-		byteArrayOutputStream.write(ByteUtils.toByta( Constantes.ID ) );
-		byteArrayOutputStream.write(MagicNumbers.MAGIC_NUMBER_0);
-		byteArrayOutputStream.write(MagicNumbers.MAGIC_NUMBER_0);
+		byteArrayOutputStream.write(ByteUtils.toByta( Constants.ID ) );
+		byteArrayOutputStream.write(MagicNumbers.MAGIC_NUMBER_ZERO);
+		byteArrayOutputStream.write(MagicNumbers.MAGIC_NUMBER_ZERO);
 		byteArrayOutputStream.write(32);
-		byteArrayOutputStream.write(MagicNumbers.MAGIC_NUMBER_0);
-		byteArrayOutputStream.write(new Integer(Constantes.ART_NET_VERSION).byteValue());
+		byteArrayOutputStream.write(MagicNumbers.MAGIC_NUMBER_ZERO);
+		byteArrayOutputStream.write(new Integer(Constants.ART_NET_VERSION).byteValue());
 		byteArrayOutputStream.write(6);	// TalkToMe
-		byteArrayOutputStream.write(MagicNumbers.MAGIC_NUMBER_0);	// Filler
+		byteArrayOutputStream.write(MagicNumbers.MAGIC_NUMBER_ZERO);	// Filler
 		
 		return byteArrayOutputStream.toByteArray();
 	}
 	
+	/**
+	 * Encode ArtTimeCode packet.
+	 * @param artTimeCode instance
+	 * @return a byte packet.
+	 * @throws IOException in error with byte array
+	 */
 	public static byte[] encodeArtTimeCodePacket( ArtTimeCode artTimeCode ) throws IOException {
 		final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
 		
 		// ID.
-		byteArrayOutputStream.write( ByteUtils.toByta( Constantes.ID ) );
+		byteArrayOutputStream.write( ByteUtils.toByta( Constants.ID ) );
 		byteArrayOutputStream.write( 0 );
 		
 		// OpTimeCode
 		byteArrayOutputStream.write( ByteUtilsArt.in16toByte( 38656 ) );
 		
 		// Version
-		byteArrayOutputStream.write(MagicNumbers.MAGIC_NUMBER_0);
-		byteArrayOutputStream.write(new Integer(Constantes.ART_NET_VERSION).byteValue());
+		byteArrayOutputStream.write(MagicNumbers.MAGIC_NUMBER_ZERO);
+		byteArrayOutputStream.write(new Integer(Constants.ART_NET_VERSION).byteValue());
 		
 		// Filler 1 and 2
-		byteArrayOutputStream.write(MagicNumbers.MAGIC_NUMBER_0);
-		byteArrayOutputStream.write(MagicNumbers.MAGIC_NUMBER_0);
+		byteArrayOutputStream.write(MagicNumbers.MAGIC_NUMBER_ZERO);
+		byteArrayOutputStream.write(MagicNumbers.MAGIC_NUMBER_ZERO);
 		
 		// Frame
 		byteArrayOutputStream.write( ByteUtilsArt.in8toByte( artTimeCode.getFrameTime() ) );
@@ -96,7 +114,7 @@ public final class ArtNetPacketEncoder {
 		artPollCounter++;
 		
 		// ID.
-		byteArrayOutputStream.write( ByteUtils.toByta( Constantes.ID ) );
+		byteArrayOutputStream.write( ByteUtils.toByta( Constants.ID ) );
 		byteArrayOutputStream.write( 0 );
 		
 		// ArtPollReply
@@ -104,17 +122,17 @@ public final class ArtNetPacketEncoder {
 		byteArrayOutputStream.write( 33 );
 
 		// IP
-		final InetAddress inetAdress = InetAddress.getByName( Constantes.SERVER_IP );
+		final InetAddress inetAdress = InetAddress.getByName( Constants.SERVER_IP );
 		byteArrayOutputStream.write( inetAdress.getAddress() );
 		
 		// Port
-		byteArrayOutputStream.write( ByteUtilsArt.in16toByte( Constantes.SERVER_PORT_HUMANS ) );
+		byteArrayOutputStream.write( ByteUtilsArt.in16toByte( Constants.SERVER_PORT_HUMANS ) );
 		
 		// Version Hight
-		byteArrayOutputStream.write( ByteUtilsArt.in8toByte( Constantes.VERSION_LIB_HIGHT ));
+		byteArrayOutputStream.write( ByteUtilsArt.in8toByte( Constants.VERSION_LIB_HIGHT ));
 		
 		// Version Low
-		byteArrayOutputStream.write( ByteUtilsArt.in8toByte( Constantes.VERSION_LIB_LOW ));
+		byteArrayOutputStream.write( ByteUtilsArt.in8toByte( Constants.VERSION_LIB_LOW ));
 		
 		// Net Switch
 		byteArrayOutputStream.write( ByteUtilsArt.in8toByte( 0 ) );
@@ -130,10 +148,10 @@ public final class ArtNetPacketEncoder {
 		byteArrayOutputStream.write( ByteUtils.toByta( "CZ" ) );
 		
 		// ShotName
-		byteArrayOutputStream.write( ByteUtils.toByta( encodeString(Constantes.SHORT_NAME, 18 ) ) );
+		byteArrayOutputStream.write( ByteUtils.toByta( encodeString(Constants.SHORT_NAME, 18 ) ) );
 		
 		// LongName
-		byteArrayOutputStream.write( ByteUtils.toByta( encodeString(Constantes.LONG_NAME, 64 ) ) );
+		byteArrayOutputStream.write( ByteUtils.toByta( encodeString(Constants.LONG_NAME, 64 ) ) );
 		
 		//Node report
 		final int vArtPollCounter = artPollCounter + 1;
@@ -153,7 +171,7 @@ public final class ArtNetPacketEncoder {
 		final Map<Integer, ControllerPortType> portsTypesMap = pControler.getPortTypeMap();
 		ControllerPortType controlerPortType = null;
 		BitSet bitSet = null;
-		for ( int i=0; i!=Constantes.MAX_PORT; i++ ) {
+		for ( int i=0; i!=Constants.MAX_PORT; i++ ) {
 			controlerPortType = portsTypesMap.get(i);
 			// No port
 			if ( controlerPortType == null ) {
@@ -194,7 +212,7 @@ public final class ArtNetPacketEncoder {
 		// Good Input
 		final Map<Integer, ControllerGoodInput> portsGoodInputsMap = pControler.getGoodInputMapping();
 		ControllerGoodInput controlerGoodInput = null;
-		for ( int i=0; i!=Constantes.MAX_PORT; i++ ) {
+		for ( int i=0; i!=Constants.MAX_PORT; i++ ) {
 			controlerGoodInput = portsGoodInputsMap.get(i);
 			// No port
 			if ( controlerGoodInput == null ) {
@@ -215,7 +233,7 @@ public final class ArtNetPacketEncoder {
 		// Good Ouput
 		final Map<Integer, ControllerGoodOutput> portsGoodOutputsMap = pControler.getGoodOutputMapping();
 		ControllerGoodOutput controlerGoodOutput = null;
-		for ( int i=0; i!=Constantes.MAX_PORT; i++ ) {
+		for ( int i=0; i!=Constants.MAX_PORT; i++ ) {
 			controlerGoodOutput = portsGoodOutputsMap.get(i);
 			// No port
 			if ( controlerGoodOutput == null ) {
@@ -239,7 +257,7 @@ public final class ArtNetPacketEncoder {
 		BitSet bitSetOut;
 		final ByteArrayOutputStream byteArrayInTempOutputStream = new ByteArrayOutputStream();
 		final ByteArrayOutputStream byteArrayOutTempOutputStream = new ByteArrayOutputStream();
-		for ( int i=0; i!=Constantes.MAX_PORT; i++ ) {
+		for ( int i=0; i!=Constants.MAX_PORT; i++ ) {
 			controlerPortType = portsTypesMap.get(i);
 			bitSetIn = new BitSet(8);
 			bitSetOut = new BitSet(8);

@@ -1,11 +1,24 @@
-/**
- * 
+/*
+ * Copyright 2012 Corentin Azelart.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package fr.azelart.artnetstack.listeners;
 
 import java.util.EventListener;
 
 import fr.azelart.artnetstack.domain.artpoll.ArtPoll;
+import fr.azelart.artnetstack.domain.arttimecode.ArtTimeCode;
 
 /**
  * The list of availables methods on recept ArtNetPacket.
@@ -17,6 +30,12 @@ public interface ArtNetPacketListener extends EventListener {
 	 * We have receive an ArtPollPacket.
 	 * @param artPoll is the artpollpacket.
 	 */
-	void onArtPoll( ArtPoll artPoll );
-	
+	void onArtPoll(ArtPoll artPoll);
+
+	/**
+	 * We have receive an ArtTimeCode Packet.
+	 * @param artTimeCode is the artTimeCode object
+	 */
+	void onArtTimeCode(ArtTimeCode artTimeCode);
+
 }
