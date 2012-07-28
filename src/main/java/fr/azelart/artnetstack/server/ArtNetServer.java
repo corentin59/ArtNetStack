@@ -79,7 +79,7 @@ public class ArtNetServer extends Thread implements Runnable {
 		// We inform than server is ready
 		fireServerConnect();
 
-		while (true) {
+		while (isAlive()) {
 			inputDatagramPacket = new DatagramPacket(inputBuffer, inputBuffer.length);
 			try {
 				datagramSocket.receive(inputDatagramPacket);
@@ -99,10 +99,12 @@ public class ArtNetServer extends Thread implements Runnable {
 					}
 				}
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				
 			}
 		}
+		
+		// Server is die
+		fireServerTerminate();
 	}
 
 	/**
@@ -128,6 +130,15 @@ public class ArtNetServer extends Thread implements Runnable {
 	public final void fireServerConnect() {
 		for (ServerListener listener : this.listenersListServer) {
 			listener.onConnect();
+		}
+	}
+	
+	/**
+	 * Server is die.
+	 */
+	public final void fireServerTerminate() {
+		for (ServerListener listener : this.listenersListServer) {
+			listener.onTerminate();
 		}
 	}
 

@@ -24,5 +24,8 @@ public interface ServerListener {
 
 	/** Server is connected. */
 	void onConnect();
+	
+	/** Server is disconnected and is off (thread is die). */
+	void onTerminate();
 
 }

@@ -105,7 +105,10 @@ public class ServerStart {
 				
 				public void onConnect() {
 					System.out.println("Connected");
-					
+				}
+
+				public void onTerminate() {
+					System.out.println("Disconnected");
 				}
 			} );
 			

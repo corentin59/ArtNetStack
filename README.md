@@ -18,7 +18,8 @@ Currently supported events features are:
   * **ArtPollReply** ArtPollReply event catch
   * **ArtTimeCode** ArtTimeCode event catch
 
-  * **onConnect** Server has binding adress
+  * **onConnect** Server has binding address
+  * **onTerminate** Server is die and disconnected
 
 Currently supported protocols are:
   * **Broadcast** Broadcast protocol (100%)
