@@ -7,7 +7,7 @@ This library is implementing the basic protocol for Java applications.
 http://www.artisticlicence.com/WebSiteMaster/User%20Guides/art-net.pdf
 
 Currently supported core features are:
-  * **ArtPoll** Decode ArtPoll Packet and respond with ArtPollReply
+  * **ArtPoll** Encode and Decode ArtPoll Packet
   * **ArtPollReply** Encode ArtPollReply
-  * **ArtTimeCode** Decode ArtTimeCode packet for TimeCode
+  * **ArtTimeCode** Decode ArtTimeCode
 
