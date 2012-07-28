@@ -15,12 +15,15 @@
  */
 package fr.azelart.artnetstack.utils;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.BitSet;
 
 import fr.azelart.artnetstack.constants.Constants;
 import fr.azelart.artnetstack.constants.OpCodeConstants;
 import fr.azelart.artnetstack.domain.artnet.ArtNetObject;
 import fr.azelart.artnetstack.domain.artpoll.ArtPoll;
+import fr.azelart.artnetstack.domain.artpollreply.ArtPollReply;
 import fr.azelart.artnetstack.domain.arttimecode.ArtTimeCode;
 import fr.azelart.artnetstack.domain.arttimecode.ArtTimeCodeType;
 import fr.azelart.artnetstack.domain.enums.NetworkCommunicationTypeEnum;
@@ -42,7 +45,7 @@ public class ArtNetPacketDecoder {
 		final String opCode = hexaBrut.substring(16, 20);
 		
 		// Yes, it's a ArtNetPacket
-		if ( !"Art-Net".equals( id ) || !checkVersion( packet, hexaBrut ) ) {
+		if ( !"Art-Net".equals( id ) ) {
 			return null; 
 		}
 
@@ -52,18 +55,67 @@ public class ArtNetPacketDecoder {
 		 */
 		if ( OpCodeConstants.OPPOLL.equals( opCode ) ) {
 			// ArtPollPacket : This is an ArtPoll packet, no other data is contained in this UDP packet
+			if ( !checkVersion( packet, hexaBrut ) )
+				return null;
 			return decodeArtPollPacket( packet, hexaBrut );
 		} else if ( OpCodeConstants.OPTIMECODE.equals( opCode ) ) {
 			// ArtTimePacket : OpTimeCode This is an ArtTimeCode packet. It is used to transport time code over the network.
+			if ( !checkVersion( packet, hexaBrut ) )
+				return null;
 			return decodeArtTimeCodePacket( packet, hexaBrut );
+		} else if ( OpCodeConstants.OPPOLLREPLY.equals( opCode ) ) {
+			// ArtPollReply : This is a ArtPollReply packet.
+			return decodeArtPollReplyPacket( packet, hexaBrut );
 		}
 
 		return artNetObject;
 	}
 	
 	/**
+	 * Decode an artPollReplyPacket.
+	 * @param bytes is the packet data
+	 * @param hexaBrut is the ascii data
+	 * @return ArtPollReply
+	 */
+	private static ArtPollReply decodeArtPollReplyPacket( byte[] bytes, String hexaBrut ) {
+		final ArtPollReply artPollReply = new ArtPollReply();
+		
+		// IP Adress (4*8)
+		final byte[] adress = new byte[4];
+		System.arraycopy(bytes, 10, adress, 0, 4);
+		try {
+			final InetAddress inetAdress = InetAddress.getByAddress( adress );
+			artPollReply.setIp( inetAdress.getHostAddress() );
+		} catch (UnknownHostException e) {
+			artPollReply.setIp( null );
+		}
+		
+		// Port (2*8)
+		artPollReply.setPort( ByteUtilsArt.byte2toIn(bytes, 14) );
+		
+		// Version High (1*8)
+		artPollReply.setVersionH( bytes[16] );
+		
+		// Version Low (1*8)
+		artPollReply.setVersionL( bytes[15] );
+		
+		
+		// Oem Hi (1*8) + Oem (1*8)
+		artPollReply.setOemHexa( String.format("%02X", bytes[20]) + String.format("%02X", bytes[21]) );
+		
+		// UBEA Version (1*8) / 0 if not programmed
+		artPollReply.setUbeaVersion( bytes[22] );
+		
+
+		
+		
+		
+		return artPollReply;
+	}
+	
+	/**
 	 * Decode an artTimeCodePacket.
-	 * @param packet is the packet data
+	 * @param bytes is the packet data
 	 * @return the ArtPollPacketObject
 	 */
 	private static ArtTimeCode decodeArtTimeCodePacket( byte[] bytes, String hexaBrut ) {		

@@ -18,9 +18,6 @@ package fr.azelart.artnetstack.domain.controller;
 import java.util.Map;
 
 import fr.azelart.artnetstack.domain.artnet.ArtNetObject;
-import fr.azelart.artnetstack.domain.enums.ArtPollReplyStrategyEnum;
-import fr.azelart.artnetstack.domain.enums.DiagnosticMessageEnum;
-import fr.azelart.artnetstack.domain.enums.DiagnosticMessageEnumAvailable;
 
 /**
  * General controler.
@@ -29,13 +26,13 @@ import fr.azelart.artnetstack.domain.enums.DiagnosticMessageEnumAvailable;
 public class Controller extends ArtNetObject {
 	
 	/** Diffusion for diagnostic messages. */
-	private DiagnosticMessageEnum diagnosticMessageDiffusion;
+	//private DiagnosticMessageEnum diagnosticMessageDiffusion;
 
 	/** Send diagnostic message. */
-	private DiagnosticMessageEnumAvailable diagnosticMessageAvailable;
+	//private DiagnosticMessageEnumAvailable diagnosticMessageAvailable;
 
 	/** ArtPoll reply strategy. */
-	private  ArtPollReplyStrategyEnum artPollStrategie;
+	//private  ArtPollReplyStrategyEnum artPollStrategie;
 
 	/** Port mapping. */
 	private Map<Integer, ControllerPortType> portTypeMap;

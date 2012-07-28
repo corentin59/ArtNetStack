@@ -18,6 +18,7 @@ package fr.azelart.artnetstack.listeners;
 import java.util.EventListener;
 
 import fr.azelart.artnetstack.domain.artpoll.ArtPoll;
+import fr.azelart.artnetstack.domain.artpollreply.ArtPollReply;
 import fr.azelart.artnetstack.domain.arttimecode.ArtTimeCode;
 
 /**
@@ -27,15 +28,20 @@ import fr.azelart.artnetstack.domain.arttimecode.ArtTimeCode;
 public interface ArtNetPacketListener extends EventListener {
 
 	/**
-	 * We have receive an ArtPollPacket.
-	 * @param artPoll is the artpollpacket.
+	 * We have receive an ArtPoll packet.
+	 * @param artPoll is the object
 	 */
 	void onArtPoll(ArtPoll artPoll);
+	
+	/**
+	 * We have receive an ArtPolLReply packet.
+	 * @param artPollReply is the artPollReply object
+	 */
+	void onArtPollReply(ArtPollReply artPollReply);
 
 	/**
-	 * We have receive an ArtTimeCode Packet.
+	 * We have receive an ArtTimeCode packet.
 	 * @param artTimeCode is the artTimeCode object
 	 */
 	void onArtTimeCode(ArtTimeCode artTimeCode);
-
 }

@@ -22,9 +22,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 import fr.azelart.artnetstack.domain.artpoll.ArtPoll;
+import fr.azelart.artnetstack.domain.artpollreply.ArtPollReply;
 import fr.azelart.artnetstack.domain.arttimecode.ArtTimeCode;
 import fr.azelart.artnetstack.domain.controller.Controller;
-import fr.azelart.artnetstack.domain.controller.ControllerController;
 import fr.azelart.artnetstack.domain.controller.ControllerGoodInput;
 import fr.azelart.artnetstack.domain.controller.ControllerGoodOutput;
 import fr.azelart.artnetstack.domain.controller.ControllerPortType;
@@ -45,7 +45,7 @@ public class ServerStart {
 	private static Controller thisControler;
 	
 	private static void createControler() {
-		thisControler = new ControllerController();
+		thisControler = new Controller();
 		
 		// Create one port
 		final Map<Integer,ControllerPortType> vPorts = new HashMap<Integer, ControllerPortType>();
@@ -129,6 +129,10 @@ public class ServerStart {
 				 */
 				public void onArtTimeCode(ArtTimeCode artTimeCode) {
 					System.out.println(artTimeCode);
+				}
+
+				public void onArtPollReply(ArtPollReply artPollReply) {
+					System.out.println( artPollReply );
 				}
 				
 			} );
