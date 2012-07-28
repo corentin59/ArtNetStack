@@ -17,16 +17,18 @@ package fr.azelart.artnetstack.utils;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.util.BitSet;
 
 import fr.azelart.artnetstack.constants.Constants;
 import fr.azelart.artnetstack.constants.OpCodeConstants;
 import fr.azelart.artnetstack.domain.artnet.ArtNetObject;
 import fr.azelart.artnetstack.domain.artpoll.ArtPoll;
 import fr.azelart.artnetstack.domain.artpollreply.ArtPollReply;
+import fr.azelart.artnetstack.domain.artpollreply.ArtPollReplyStatus;
 import fr.azelart.artnetstack.domain.arttimecode.ArtTimeCode;
 import fr.azelart.artnetstack.domain.arttimecode.ArtTimeCodeType;
+import fr.azelart.artnetstack.domain.enums.IndicatorStateEnum;
 import fr.azelart.artnetstack.domain.enums.NetworkCommunicationTypeEnum;
+import fr.azelart.artnetstack.domain.enums.UniverseAddressProgrammingAuthorityEnum;
 
 /**
  * ArtNetPacket decoder.
@@ -99,6 +101,9 @@ public class ArtNetPacketDecoder {
 		// Version Low (1*8)
 		artPollReply.setVersionL( bytes[15] );
 		
+		// Subnet (1*8) and subswtich (1*8)
+		artPollReply.setSubNet( String.format("%02X", bytes[18]) );
+		artPollReply.setSubSwitch( String.format("%02X", bytes[19]) );
 		
 		// Oem Hi (1*8) + Oem (1*8)
 		artPollReply.setOemHexa( String.format("%02X", bytes[20]) + String.format("%02X", bytes[21]) );
@@ -106,9 +111,42 @@ public class ArtNetPacketDecoder {
 		// UBEA Version (1*8) / 0 if not programmed
 		artPollReply.setUbeaVersion( bytes[22] );
 		
+		// Status area
+		final ArtPollReplyStatus artPollReplyStatus = new ArtPollReplyStatus();
+		artPollReplyStatus.setUbeaPresent(ByteUtilsArt.bitIsSet(bytes[23] , 0));
+		artPollReplyStatus.setRdmCapable(ByteUtilsArt.bitIsSet(bytes[23] , 1));
+		artPollReplyStatus.setBootRom(ByteUtilsArt.bitIsSet(bytes[23] , 2));
 
+		if (ByteUtilsArt.bitIsSet(bytes[23] , 5) && ByteUtilsArt.bitIsSet(bytes[23] , 4)) {
+			artPollReplyStatus.setProgrammingAuthority( UniverseAddressProgrammingAuthorityEnum.NOT_USED );
+		} else if (!ByteUtilsArt.bitIsSet(bytes[23] , 5) && ByteUtilsArt.bitIsSet(bytes[23] , 4)) {
+			artPollReplyStatus.setProgrammingAuthority( UniverseAddressProgrammingAuthorityEnum.FRONT_PANEL );
+		} else if (ByteUtilsArt.bitIsSet(bytes[23] , 5) && !ByteUtilsArt.bitIsSet(bytes[23] , 4)) {
+			artPollReplyStatus.setProgrammingAuthority( UniverseAddressProgrammingAuthorityEnum.NETWORK );
+		} else if (!ByteUtilsArt.bitIsSet(bytes[23] , 5) && !ByteUtilsArt.bitIsSet(bytes[23] , 4)) {
+			artPollReplyStatus.setProgrammingAuthority( UniverseAddressProgrammingAuthorityEnum.UNKNOW );
+		}
 		
+		if (ByteUtilsArt.bitIsSet(bytes[23] , 7) && ByteUtilsArt.bitIsSet(bytes[23] , 6)) {
+			artPollReplyStatus.setIndicatorState( IndicatorStateEnum.NORMAL_MODE );
+		} else if (!ByteUtilsArt.bitIsSet(bytes[23] , 7) && ByteUtilsArt.bitIsSet(bytes[23] , 6)) {
+			artPollReplyStatus.setIndicatorState( IndicatorStateEnum.LOCATE_MODE );
+		} else if (ByteUtilsArt.bitIsSet(bytes[23] , 7) && !ByteUtilsArt.bitIsSet(bytes[23] , 6)) {
+			artPollReplyStatus.setIndicatorState( IndicatorStateEnum.MUTE_MODE );
+		} else if (!ByteUtilsArt.bitIsSet(bytes[23] , 7) && !ByteUtilsArt.bitIsSet(bytes[23] , 6)) {
+			artPollReplyStatus.setIndicatorState( IndicatorStateEnum.UNKNOW );
+		}
+
+		artPollReply.setArtPollReplyStatus(artPollReplyStatus);
 		
+		// EstaManHi (1*8) + EstaManLow (1*8)
+		artPollReply.setEsta( new String (bytes, 24, 2 ) );
+
+		// Short Name
+		artPollReply.setShortName( new String (bytes, 26, 18 ) );
+		
+		// Long Name
+		artPollReply.setLongName( new String (bytes, 44, 64 ) );
 		
 		return artPollReply;
 	}

@@ -17,6 +17,11 @@ package fr.azelart.artnetstack.domain.artpollreply;
 
 import fr.azelart.artnetstack.domain.artnet.ArtNetObject;
 
+/**
+ * This is an ArtPollReply object.
+ * @author Corentin Azelart
+ *
+ */
 public class ArtPollReply extends ArtNetObject {
 	
 	/** Adress IP. */
@@ -36,6 +41,40 @@ public class ArtPollReply extends ArtNetObject {
 	
 	/** UBEA Version. */
 	private int ubeaVersion;
+	
+	/** ArtPollReply status. */
+	private ArtPollReplyStatus artPollReplyStatus;
+	
+	/** Network. */
+	private String subNet;
+	
+	/** Adress in network. */
+	private String subSwitch;
+	
+	/** The ESTA manufacturer code. These codes are used to 
+	 * represent equipment manufacturer. They are assigned 
+	 * by ESTA. This field can be interpreted as two ASCII 
+	 * bytes representing the manufacturer initials.
+	 */
+	private String esta;
+	
+	/**
+	 * The array represents a null terminated short name for 
+	 * the Node. The Controller uses the ArtAddress packet 
+	 * to program this string. Max length is 17 characters 
+	 * plus the null. This is a fixed length field, although the 
+	 * string it contains can be shorter than the field.
+	 */
+	private String shortName;
+	
+	/**
+	 * The array represents a null terminated long name for 
+	 * the Node. The Controller uses the ArtAddress packet 
+	 * to program this string. Max length is 63 characters 
+	 * plus the null. This is a fixed length field, although the 
+	 * string it contains can be shorter than the field.
+	 */
+	private String longName;
 
 	/**
 	 * @return the ip
@@ -121,8 +160,81 @@ public class ArtPollReply extends ArtNetObject {
 		this.ubeaVersion = ubeaVersion;
 	}
 
+	public ArtPollReplyStatus getArtPollReplyStatus() {
+		return artPollReplyStatus;
+	}
 
-	
-	
-	
+	public void setArtPollReplyStatus(ArtPollReplyStatus artPollReplyStatus) {
+		this.artPollReplyStatus = artPollReplyStatus;
+	}
+
+	/**
+	 * @return the subNet
+	 */
+	public String getSubNet() {
+		return subNet;
+	}
+
+	/**
+	 * @param subNet the subNet to set
+	 */
+	public void setSubNet(String subNet) {
+		this.subNet = subNet;
+	}
+
+	/**
+	 * @return the subSwitch
+	 */
+	public String getSubSwitch() {
+		return subSwitch;
+	}
+
+	/**
+	 * @param subSwitch the subSwitch to set
+	 */
+	public void setSubSwitch(String subSwitch) {
+		this.subSwitch = subSwitch;
+	}
+
+	/**
+	 * @return the shortName
+	 */
+	public String getShortName() {
+		return shortName;
+	}
+
+	/**
+	 * @param shortName the shortName to set
+	 */
+	public void setShortName(String shortName) {
+		this.shortName = shortName;
+	}
+
+	/**
+	 * @return the longName
+	 */
+	public String getLongName() {
+		return longName;
+	}
+
+	/**
+	 * @param longName the longName to set
+	 */
+	public void setLongName(String longName) {
+		this.longName = longName;
+	}
+
+	/**
+	 * @return the esta
+	 */
+	public String getEsta() {
+		return esta;
+	}
+
+	/**
+	 * @param esta the esta to set
+	 */
+	public void setEsta(String esta) {
+		this.esta = esta;
+	}
 }
