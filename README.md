@@ -8,6 +8,6 @@ http://www.artisticlicence.com/WebSiteMaster/User%20Guides/art-net.pdf
 
 Currently supported core features are:
   * **ArtPoll** Encode and Decode ArtPoll Packet
-  * **ArtPollReply** Encode and Decode ArtPollReply
-  * **ArtTimeCode** Decode ArtTimeCode
+  * **ArtPollReply** Encode ArtPollReply
+  * **ArtTimeCode** Decode and Decode ArtTimeCode
 
