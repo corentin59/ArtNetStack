@@ -78,17 +78,20 @@ public class ArtNetServer extends Thread implements Runnable {
 
 		// We inform than server is ready
 		fireServerConnect();
+		
+		// ArtNet object
+		ArtNetObject vArtNetObject = null;
 
 		while (isAlive()) {
 			inputDatagramPacket = new DatagramPacket(inputBuffer, inputBuffer.length);
 			try {
 				datagramSocket.receive(inputDatagramPacket);
-				final ArtNetObject vArtNetObject = ArtNetPacketDecoder.decodeArtNetPacket(inputDatagramPacket.getData());
+				vArtNetObject = ArtNetPacketDecoder.decodeArtNetPacket(inputDatagramPacket.getData());
 				
 				// It's realy an artnet packet.
 				if (vArtNetObject != null) {
-					// ArtPollPacket
 					if (vArtNetObject instanceof ArtPoll) {
+						// ArtPollPacket
 						fireArtPoll((ArtPoll) vArtNetObject);
 					} else if (vArtNetObject instanceof ArtTimeCode) {
 						// ArtTimeCodePacket
