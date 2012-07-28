@@ -16,6 +16,8 @@
 package fr.azelart.artnetstack.domain.artpoll;
 
 import fr.azelart.artnetstack.domain.artnet.ArtNetObject;
+import fr.azelart.artnetstack.domain.enums.NetworkCommunicationTypeEnum;
+import fr.azelart.artnetstack.domain.enums.PriorityCodesEnum;
 
 /**
  * This is an ArtPoll.
@@ -25,9 +27,101 @@ import fr.azelart.artnetstack.domain.artnet.ArtNetObject;
 public class ArtPoll extends ArtNetObject {
 
 	/**
+	 * Send ArtPollReply whenever Node conditions 
+	 * change. This selection allows the Controller to be 
+	 * informed of changes without the need to continuously poll.
+	 * 
+	 * If false :
+	 * Only send ArtPollReply in response to an ArtPoll or ArtAddress.
+	 */
+	private Boolean artPollReplyWhenConditionsChanges;
+	
+	/**
+	 * Send me diagnostics messages.
+	 */
+	private Boolean sendMeDiagnosticsMessage;
+	
+	/**
+	 * Diagnostics messages are broadcast or unicast.
+	 */
+	private NetworkCommunicationTypeEnum networkCommunicationTypeDiagnosticsMessages;
+	
+	/**
+	 * Prority codes
+	 */
+	private PriorityCodesEnum priorityCodes;	
+	
+	
+	/**
 	 * Constructor.
 	 */
 	public ArtPoll() {
 		super();
+	}
+
+
+	/**
+	 * @return the artPollReplyWhenConditionsChanges
+	 */
+	public Boolean getArtPollReplyWhenConditionsChanges() {
+		return artPollReplyWhenConditionsChanges;
+	}
+
+
+	/**
+	 * @param artPollReplyWhenConditionsChanges the artPollReplyWhenConditionsChanges to set
+	 */
+	public void setArtPollReplyWhenConditionsChanges(
+			Boolean artPollReplyWhenConditionsChanges) {
+		this.artPollReplyWhenConditionsChanges = artPollReplyWhenConditionsChanges;
+	}
+
+
+	/**
+	 * @return the sendMeDiagnosticsMessage
+	 */
+	public Boolean getSendMeDiagnosticsMessage() {
+		return sendMeDiagnosticsMessage;
+	}
+
+
+	/**
+	 * @param sendMeDiagnosticsMessage the sendMeDiagnosticsMessage to set
+	 */
+	public void setSendMeDiagnosticsMessage(Boolean sendMeDiagnosticsMessage) {
+		this.sendMeDiagnosticsMessage = sendMeDiagnosticsMessage;
+	}
+
+
+	/**
+	 * @return the networkCommunicationTypeDiagnosticsMessages
+	 */
+	public NetworkCommunicationTypeEnum getNetworkCommunicationTypeDiagnosticsMessages() {
+		return networkCommunicationTypeDiagnosticsMessages;
+	}
+
+
+	/**
+	 * @param networkCommunicationTypeDiagnosticsMessages the networkCommunicationTypeDiagnosticsMessages to set
+	 */
+	public void setNetworkCommunicationTypeDiagnosticsMessages(
+			NetworkCommunicationTypeEnum networkCommunicationTypeDiagnosticsMessages) {
+		this.networkCommunicationTypeDiagnosticsMessages = networkCommunicationTypeDiagnosticsMessages;
+	}
+
+
+	/**
+	 * @return the priorityCodes
+	 */
+	public PriorityCodesEnum getPriorityCodes() {
+		return priorityCodes;
+	}
+
+
+	/**
+	 * @param priorityCodes the priorityCodes to set
+	 */
+	public void setPriorityCodes(PriorityCodesEnum priorityCodes) {
+		this.priorityCodes = priorityCodes;
 	}
 }

@@ -15,12 +15,15 @@
  */
 package fr.azelart.artnetstack.utils;
 
+import java.util.BitSet;
+
 import fr.azelart.artnetstack.constants.Constants;
 import fr.azelart.artnetstack.constants.OpCodeConstants;
 import fr.azelart.artnetstack.domain.artnet.ArtNetObject;
 import fr.azelart.artnetstack.domain.artpoll.ArtPoll;
 import fr.azelart.artnetstack.domain.arttimecode.ArtTimeCode;
 import fr.azelart.artnetstack.domain.arttimecode.ArtTimeCodeType;
+import fr.azelart.artnetstack.domain.enums.NetworkCommunicationTypeEnum;
 
 /**
  * ArtNetPacket decoder.
@@ -90,7 +93,18 @@ public class ArtNetPacketDecoder {
 	 * @return the ArtPollPacketObject
 	 */
 	private static ArtPoll decodeArtPollPacket( byte[] bytes, String hexaBrut ) {	
-		return new ArtPoll();
+		final ArtPoll artPoll = new ArtPoll();
+			
+		artPoll.setArtPollReplyWhenConditionsChanges( ByteUtilsArt.bitIsSet(bytes[12], 1) );
+		artPoll.setSendMeDiagnosticsMessage( ByteUtilsArt.bitIsSet(bytes[12], 2) );
+
+		if ( ByteUtilsArt.bitIsSet(bytes[12], 3) ) {
+			artPoll.setNetworkCommunicationTypeDiagnosticsMessages( NetworkCommunicationTypeEnum.UNICAST );
+		} else {
+			artPoll.setNetworkCommunicationTypeDiagnosticsMessages( NetworkCommunicationTypeEnum.BROADCAST );
+		}
+		
+		return artPoll;
 	}
 	
 	/**

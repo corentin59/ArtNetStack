@@ -17,6 +17,10 @@ package fr.azelart.artnetstack.utils;
 
 public final class ByteUtilsArt {
 	
+	public static boolean bitIsSet( int i, int offset ) {
+		return (i & (1 << offset)) != 0;
+	}
+	
 	public static byte[] in8toByte( int i ) {
 		return new byte[] {(byte)((i >> 0) & 0xff)};
 	}
