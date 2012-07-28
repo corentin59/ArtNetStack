@@ -11,7 +11,7 @@ http://www.artisticlicence.com/WebSiteMaster/User%20Guides/art-net.pdf
 Currently supported core features are:
   * **ArtPoll** Encode and Decode ArtPoll Packet
   * **ArtPollReply** Encode ArtPollReply
-  * **ArtTimeCode** Decode and Decode ArtTimeCode
+  * **ArtTimeCode** Encode and Decode ArtTimeCode
 
 Currently supported events features are:
   * **ArtPoll** ArtPoll event catch
