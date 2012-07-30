@@ -121,6 +121,7 @@ public class ArtNetServer extends Thread implements Runnable {
 				
 				// It's realy an artnet packet.
 				if (vArtNetObject != null) {
+					fireArtNet(vArtNetObject);
 					if (vArtNetObject instanceof ArtPoll) {
 						// ArtPollPacket
 						fireArtPoll((ArtPoll) vArtNetObject);
@@ -137,7 +138,7 @@ public class ArtNetServer extends Thread implements Runnable {
 			}
 		}
 	}
-	
+
 	/**
 	 * Get Broadcast Ip.
 	 * @return
@@ -220,7 +221,17 @@ public class ArtNetServer extends Thread implements Runnable {
 	}
 
 	/**
-	 * A new ArtPollPacket incomming.
+	 * A new ArtNetObject incoming.
+	 * @param artNetObject is the artPollPacket
+	 */
+	private void fireArtNet(ArtNetObject artNetObject) {
+		for (ArtNetPacketListener listener : this.listenersListPacket) {
+			listener.onArt(artNetObject);
+		}
+	}
+	
+	/**
+	 * A new ArtPollPacket incoming.
 	 * @param artPoll is the artPollPacket
 	 */
 	public final void fireArtPoll(final ArtPoll artPoll) {
@@ -230,7 +241,7 @@ public class ArtNetServer extends Thread implements Runnable {
 	}
 
 	/**
-	 * A new ArtTimeCode incomming.
+	 * A new ArtTimeCode incoming.
 	 * @param artTimeCode is the instance of the artTimeCodePacket
 	 */
 	public final void fireArtTimeCode(final ArtTimeCode artTimeCode) {
@@ -240,7 +251,7 @@ public class ArtNetServer extends Thread implements Runnable {
 	}
 	
 	/**
-	 * A new ArtPollReply incomming.
+	 * A new ArtPollReply incoming.
 	 * @param artPollReply is the instance of the artPollReplyPacket
 	 */
 	public final void fireArtPollReply(final ArtPollReply artPollReply) {

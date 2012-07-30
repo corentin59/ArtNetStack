@@ -14,6 +14,7 @@ Currently supported core features are:
   * **ArtTimeCode** Encode and Decode ArtTimeCode
 
 Currently supported events features are:
+  * **Art** ArtNet packet event catch
   * **ArtPoll** ArtPoll event catch
   * **ArtPollReply** ArtPollReply event catch
   * **ArtTimeCode** ArtTimeCode event catch
