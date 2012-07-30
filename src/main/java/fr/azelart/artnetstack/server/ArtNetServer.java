@@ -19,9 +19,12 @@ import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
+import java.net.InterfaceAddress;
+import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.List;
 
 import fr.azelart.artnetstack.constants.Constants;
@@ -54,16 +57,43 @@ public class ArtNetServer extends Thread implements Runnable {
 	 * Listeners for server.
 	 */
 	private List<ServerListener> listenersListServer;
+	
+	/**
+	 * IP Server.
+	 */
+	private InetAddress inetAddress = null;
+
+	/**
+	 * Broadcast IP.
+	 */
+	private InetAddress inetAddressBroadcast = null;
+	
+	/**
+	 * Running.
+	 */
+	private boolean running = false; 
+	
 
 	/**
 	 * Constructor of server.
 	 * @throws SocketException if socket error
 	 * @throws UnknownHostException if we can't find the host.
 	 */
-	public ArtNetServer() throws SocketException, UnknownHostException {
+	public ArtNetServer( InetAddress inetAdress ) throws SocketException, UnknownHostException {
 		listenersListPacket = new ArrayList<ArtNetPacketListener>();
 		listenersListServer = new ArrayList<ServerListener>();
 		datagramSocket = new DatagramSocket(Constants.SERVER_PORT);
+		this.inetAddress = inetAdress;
+		inetAddressBroadcast = getBroadcast(this.inetAddress);
+	}
+	
+	/**
+	 * Constructor of server.
+	 * @throws UnknownHostException
+	 * @throws SocketException
+	 */
+	public ArtNetServer() throws UnknownHostException, SocketException {
+		this(InetAddress.getByName(Constants.SERVER_IP));
 	}
 
 	/**
@@ -77,12 +107,13 @@ public class ArtNetServer extends Thread implements Runnable {
 		byte[] inputBuffer = new byte[1024];
 
 		// We inform than server is ready
+		running = true;
 		fireServerConnect();
 		
 		// ArtNet object
 		ArtNetObject vArtNetObject = null;
 
-		while (isAlive()) {
+		while (running) {
 			inputDatagramPacket = new DatagramPacket(inputBuffer, inputBuffer.length);
 			try {
 				datagramSocket.receive(inputDatagramPacket);
@@ -105,9 +136,44 @@ public class ArtNetServer extends Thread implements Runnable {
 				
 			}
 		}
-		
-		// Server is die
+	}
+	
+	/**
+	 * Get Broadcast Ip.
+	 * @return
+	 * @throws SocketException 
+	 */
+	private static InetAddress getBroadcast( InetAddress inetAddress ) throws SocketException {
+		final Enumeration<NetworkInterface> interfaces = NetworkInterface.getNetworkInterfaces();
+		NetworkInterface networkInterface = null;
+		while (interfaces.hasMoreElements()) {
+			networkInterface = interfaces.nextElement();
+			for (InterfaceAddress interfaceAddress : networkInterface.getInterfaceAddresses()) {
+				if ( interfaceAddress.getAddress().getHostAddress().equals( inetAddress.getHostAddress() ) ) {
+					return interfaceAddress.getBroadcast();
+				}
+			}
+
+		}
+		return null;
+	}
+	
+	/**
+	 * Stop server.
+	 */
+	public final void stopServer() {
+		running = false;
+		datagramSocket.disconnect();
+		datagramSocket.close();
 		fireServerTerminate();
+	}
+	
+	/**
+	 * Check if server is running.
+	 * @return yes if he run
+	 */
+	public final boolean isRunning() {
+		return running;
 	}
 
 	/**
@@ -115,7 +181,7 @@ public class ArtNetServer extends Thread implements Runnable {
 	 * @throws IOException
 	 */
 	public final void sendPacket(  byte[] bytes ) throws IOException {
-		final DatagramPacket packet = new DatagramPacket(bytes, bytes.length, InetAddress.getByName(Constants.SERVER_IP_BROADCAST), Constants.SERVER_PORT);
+		final DatagramPacket packet = new DatagramPacket(bytes, bytes.length, inetAddressBroadcast, Constants.SERVER_PORT);
 		datagramSocket.send( packet );
 	}
 
@@ -181,5 +247,19 @@ public class ArtNetServer extends Thread implements Runnable {
 		for (ArtNetPacketListener listener : this.listenersListPacket) {
 			listener.onArtPollReply(artPollReply);
 		}
+	}
+	
+	/**
+	 * @return the inetAddress
+	 */
+	public InetAddress getInetAddress() {
+		return inetAddress;
+	}
+
+	/**
+	 * @param inetAddress the inetAddress to set
+	 */
+	public void setInetAddress(InetAddress inetAddress) {
+		this.inetAddress = inetAddress;
 	}
 }

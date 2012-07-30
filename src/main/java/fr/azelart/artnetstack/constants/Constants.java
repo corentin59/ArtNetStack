@@ -38,9 +38,6 @@ public final class Constants {
 	/** IP Adress. */
 	public static final String SERVER_IP = "192.168.1.16";
 
-	/** Broadcast IP Adress. */
-	public static final String SERVER_IP_BROADCAST = "192.168.1.255";
-
 	/** Version 14. */
 	public static final int ART_NET_VERSION = 14;
 

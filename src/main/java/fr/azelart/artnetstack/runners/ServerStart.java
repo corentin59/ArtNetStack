@@ -121,7 +121,7 @@ public class ServerStart {
 				 */
 				public void onArtPoll(ArtPoll artPoll) {
 					try {
-						artNetServer.sendPacket( ArtNetPacketEncoder.encodeArtPollReplyPacket( thisControler ) );
+						artNetServer.sendPacket( ArtNetPacketEncoder.encodeArtPollReplyPacket( thisControler, artNetServer.getInetAddress() ) );
 					} catch (IOException e) {
 						e.printStackTrace();
 					}
