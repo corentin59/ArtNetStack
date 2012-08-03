@@ -21,6 +21,7 @@ import java.net.UnknownHostException;
 import java.util.HashMap;
 import java.util.Map;
 
+import fr.azelart.artnetstack.domain.artdmx.ArtDMX;
 import fr.azelart.artnetstack.domain.artnet.ArtNetObject;
 import fr.azelart.artnetstack.domain.artpoll.ArtPoll;
 import fr.azelart.artnetstack.domain.artpollreply.ArtPollReply;
@@ -141,7 +142,10 @@ public class ServerStart {
 
 				public void onArt(ArtNetObject artNetObject) {
 					System.out.println( artNetObject );
-					
+				}
+
+				public void onArtDMX(ArtDMX artDMX) {
+					System.out.println( artDMX );
 				}
 				
 			} );

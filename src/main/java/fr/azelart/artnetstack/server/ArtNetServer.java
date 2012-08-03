@@ -28,6 +28,7 @@ import java.util.Enumeration;
 import java.util.List;
 
 import fr.azelart.artnetstack.constants.Constants;
+import fr.azelart.artnetstack.domain.artdmx.ArtDMX;
 import fr.azelart.artnetstack.domain.artnet.ArtNetObject;
 import fr.azelart.artnetstack.domain.artpoll.ArtPoll;
 import fr.azelart.artnetstack.domain.artpollreply.ArtPollReply;
@@ -131,10 +132,14 @@ public class ArtNetServer extends Thread implements Runnable {
 					} else if (vArtNetObject instanceof ArtPollReply) {
 						// ArtPollReply
 						fireArtPollReply((ArtPollReply) vArtNetObject);
+					} else if (vArtNetObject instanceof ArtDMX) {
+						// ArtDMX
+						fireArtDMXReply((ArtDMX) vArtNetObject);
 					}
 				}
 			} catch (Exception e) {
-				
+				e.getMessage();
+				e.printStackTrace();
 			}
 		}
 	}
@@ -224,12 +229,12 @@ public class ArtNetServer extends Thread implements Runnable {
 	 * A new ArtNetObject incoming.
 	 * @param artNetObject is the artPollPacket
 	 */
-	private void fireArtNet(ArtNetObject artNetObject) {
+	private void fireArtNet(final ArtNetObject artNetObject) {
 		for (ArtNetPacketListener listener : this.listenersListPacket) {
 			listener.onArt(artNetObject);
 		}
 	}
-	
+
 	/**
 	 * A new ArtPollPacket incoming.
 	 * @param artPoll is the artPollPacket
@@ -249,7 +254,7 @@ public class ArtNetServer extends Thread implements Runnable {
 			listener.onArtTimeCode(artTimeCode);
 		}
 	}
-	
+
 	/**
 	 * A new ArtPollReply incoming.
 	 * @param artPollReply is the instance of the artPollReplyPacket
@@ -259,7 +264,17 @@ public class ArtNetServer extends Thread implements Runnable {
 			listener.onArtPollReply(artPollReply);
 		}
 	}
-	
+
+	/**
+	 * A new ArtDMX incoming.
+	 * @param artDMX is the instance of the artDMX pakcet
+	 */
+	public final void fireArtDMXReply(final ArtDMX artDMX) {
+		for (ArtNetPacketListener listener : this.listenersListPacket) {
+			listener.onArtDMX(artDMX);
+		}
+	}
+
 	/**
 	 * @return the inetAddress
 	 */

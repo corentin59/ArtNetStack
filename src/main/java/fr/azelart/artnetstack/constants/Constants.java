@@ -36,7 +36,7 @@ public final class Constants {
 	public static final short SERVER_PORT_HUMANS = 1936;
 
 	/** IP Adress. */
-	public static final String SERVER_IP = "192.168.1.16";
+	public static final String SERVER_IP = "127.0.0.1";
 
 	/** Version 14. */
 	public static final int ART_NET_VERSION = 14;
@@ -58,4 +58,10 @@ public final class Constants {
 
 	/** Max Ports (4 in protocol specification). */
 	public static final int MAX_PORT = 4;
+
+	/** Size of DMX data area. */
+	public static final int DMX_512_SIZE = 512;
+
+	/** Integer escape. */
+	public static final int INT_ESCAP = 0xff;
 }

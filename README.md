@@ -12,12 +12,14 @@ Currently supported core features are:
   * **ArtPoll** Encode and Decode ArtPoll Packet
   * **ArtPollReply** Encode ArtPollReply
   * **ArtTimeCode** Encode and Decode ArtTimeCode
+  * **ArtDMX** Decode ArtDMX
 
 Currently supported events features are:
   * **Art** ArtNet packet event catch
   * **ArtPoll** ArtPoll event catch
   * **ArtPollReply** ArtPollReply event catch
   * **ArtTimeCode** ArtTimeCode event catch
+  * **ArtDMX** ArtDMX event catch
 
   * **onConnect** Server has binding address
   * **onTerminate** Server is die and disconnected

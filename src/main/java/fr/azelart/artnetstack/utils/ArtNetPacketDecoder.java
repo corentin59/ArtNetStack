@@ -20,6 +20,7 @@ import java.net.UnknownHostException;
 
 import fr.azelart.artnetstack.constants.Constants;
 import fr.azelart.artnetstack.constants.OpCodeConstants;
+import fr.azelart.artnetstack.domain.artdmx.ArtDMX;
 import fr.azelart.artnetstack.domain.artnet.ArtNetObject;
 import fr.azelart.artnetstack.domain.artpoll.ArtPoll;
 import fr.azelart.artnetstack.domain.artpollreply.ArtPollReply;
@@ -77,6 +78,9 @@ public class ArtNetPacketDecoder {
 		} else if (OpCodeConstants.OPPOLLREPLY.equals(opCode)) {
 			// ArtPollReply : This is a ArtPollReply packet.
 			return decodeArtPollReplyPacket(packet, hexaBrut);
+		} else if (OpCodeConstants.OPOUTPUT.equals(opCode)) {
+			// ArtDMX
+			return decodeArtDMXPacket(packet, hexaBrut);
 		}
 
 		return artNetObject;
@@ -190,7 +194,7 @@ public class ArtNetPacketDecoder {
 	 * @param bytes is the packet data
 	 * @return the ArtPollPacketObject
 	 */
-	private static ArtPoll decodeArtPollPacket( byte[] bytes, String hexaBrut ) {	
+	private static ArtPoll decodeArtPollPacket(byte[] bytes, String hexaBrut) {	
 		final ArtPoll artPoll = new ArtPoll();
 
 		artPoll.setArtPollReplyWhenConditionsChanges(ByteUtilsArt.bitIsSet(bytes[12], 1));
@@ -203,6 +207,39 @@ public class ArtNetPacketDecoder {
 		}
 
 		return artPoll;
+	}
+
+	/**
+	 * Decode an artDMX packet.
+	 * @param bytes is the packet data
+	 * @param hexaBrut is hexa packet
+	 * @return an ArtDMX packet.
+	 */
+	private static ArtDMX decodeArtDMXPacket(byte[] bytes, String hexaBrut) {
+		final ArtDMX artDMX = new ArtDMX();
+
+		// Sequence (1*8)
+		artDMX.setSequence(bytes[12] & Constants.INT_ESCAP);
+
+		// Physical (1*8)
+		artDMX.setPhysicalPort(bytes[13] & Constants.INT_ESCAP);
+
+		// Subnet (1*8) and subswtich (1*8)
+		artDMX.setSubNet(String.format("%02X", bytes[14]));
+		artDMX.setSubSwitch(String.format("%02X", bytes[15]));
+
+		// Length of DMX data (1*8)
+		artDMX.setLengthHi(bytes[16] & Constants.INT_ESCAP);
+
+		// Low Byte of above. (1*8)
+		artDMX.setLength(bytes[17] & Constants.INT_ESCAP);
+
+		// An variable length array of DMX512 lighting data
+		final byte[] dmx = new byte[Constants.DMX_512_SIZE];
+		System.arraycopy(bytes, 18, dmx, 0, Constants.DMX_512_SIZE);
+		artDMX.setData(byteArrayToIntArray(dmx));
+
+		return artDMX;
 	}
 
 	/**
@@ -230,5 +267,18 @@ public class ArtNetPacketDecoder {
 	    }
 
 	    return new String(c);
+	}
+
+	/**
+	 * Transform a byte array to int array.
+	 * @param in a array in bytes
+	 * @return a array in int
+	 */
+	private static int[] byteArrayToIntArray(final byte[] in) {
+		final int[] output = new int[in.length];
+		for (int i = 0; i != in.length; i++) {
+			output[i] = in[i] & Constants.INT_ESCAP;
+		}
+		return output;
 	}
 }

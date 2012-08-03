@@ -17,6 +17,7 @@ package fr.azelart.artnetstack.listeners;
 
 import java.util.EventListener;
 
+import fr.azelart.artnetstack.domain.artdmx.ArtDMX;
 import fr.azelart.artnetstack.domain.artnet.ArtNetObject;
 import fr.azelart.artnetstack.domain.artpoll.ArtPoll;
 import fr.azelart.artnetstack.domain.artpollreply.ArtPollReply;
@@ -33,13 +34,13 @@ public interface ArtNetPacketListener extends EventListener {
 	 * @param artNetObject is the artNet object
 	 */
 	void onArt(ArtNetObject artNetObject);
-	
+
 	/**
 	 * We have receive an ArtPoll packet.
 	 * @param artPoll is the object
 	 */
 	void onArtPoll(ArtPoll artPoll);
-	
+
 	/**
 	 * We have receive an ArtPolLReply packet.
 	 * @param artPollReply is the artPollReply object
@@ -51,4 +52,10 @@ public interface ArtNetPacketListener extends EventListener {
 	 * @param artTimeCode is the artTimeCode object
 	 */
 	void onArtTimeCode(ArtTimeCode artTimeCode);
+
+	/**
+	 * We have receive an ArtDMX packet.
+	 * @param artDMX is the artDMX packet
+	 */
+	void onArtDMX(ArtDMX artDMX);
 }

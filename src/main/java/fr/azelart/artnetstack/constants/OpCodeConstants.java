@@ -44,4 +44,10 @@ public final class OpCodeConstants {
 	 * It is used to transport time code over the network.
 	 */
 	public static final String OPTIMECODE = "00)7";
+
+	/**
+	 * This is an ArtDMX packet.
+	 * It is used to transport DMX over the network.
+	 */
+	public static final String OPOUTPUT = "0050";
 }
