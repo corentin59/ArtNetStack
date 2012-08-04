@@ -75,6 +75,35 @@ public class ArtPollReply extends ArtNetObject {
 	 * string it contains can be shorter than the field.
 	 */
 	private String longName;
+	
+	/**
+	 * The Style code defines the equipment style of the 
+	 * device. See Table 4 for current Style codes. 
+	 */
+	private ArtPollReplyStyle artPollReplyStyle;
+	
+	/**
+	 * toString
+	 */
+	public String toString() {
+		final StringBuilder sb = new StringBuilder();
+		sb.append("ArtPollReply[ip=").append( ip ).append(",longName").append(longName).append("]");
+		return sb.toString();
+	}
+
+	/**
+	 * @return the artPollReplyStyle
+	 */
+	public ArtPollReplyStyle getArtPollReplyStyle() {
+		return artPollReplyStyle;
+	}
+
+	/**
+	 * @param artPollReplyStyle the artPollReplyStyle to set
+	 */
+	public void setArtPollReplyStyle(ArtPollReplyStyle artPollReplyStyle) {
+		this.artPollReplyStyle = artPollReplyStyle;
+	}
 
 	/**
 	 * @return the ip
