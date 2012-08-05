@@ -88,6 +88,10 @@ public class ServerStart {
 		thisControler.setGoodOutputMapping( vGoodOutputsMap );
 		thisControler.setGoodInputMapping(vGoodInputsMap);
 		thisControler.setPortTypeMap(vPorts);
+		
+		// Network
+		thisControler.setNetwork("0");
+		thisControler.setSubNetwork("D");
 	}
 	
 	/**

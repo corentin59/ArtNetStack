@@ -48,6 +48,16 @@ public class Controller extends ArtNetObject {
 	 * Set to true when video is showing ethernet data.
 	 */
 	private Boolean screen;
+	
+	/**
+	 * Network.
+	 */
+	private String network;
+	
+	/**
+	 * Subnetwork.
+	 */
+	private String subNetwork;
 
 	/**
 	 * @return the goodInputMapping
@@ -112,5 +122,33 @@ public class Controller extends ArtNetObject {
 	 */
 	public final void setScreen(Boolean screen) {
 		this.screen = screen;
+	}
+
+	/**
+	 * @return the network
+	 */
+	public String getNetwork() {
+		return network;
+	}
+
+	/**
+	 * @param network the network to set
+	 */
+	public void setNetwork(String network) {
+		this.network = network;
+	}
+
+	/**
+	 * @return the subNetwork
+	 */
+	public String getSubNetwork() {
+		return subNetwork;
+	}
+
+	/**
+	 * @param subNetwork the subNetwork to set
+	 */
+	public void setSubNetwork(String subNetwork) {
+		this.subNetwork = subNetwork;
 	}
 }

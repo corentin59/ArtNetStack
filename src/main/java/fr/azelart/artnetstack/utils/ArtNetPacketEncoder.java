@@ -134,8 +134,8 @@ public final class ArtNetPacketEncoder {
 		byteArrayOutputStream.write( ByteUtilsArt.in8toByte( Constants.VERSION_LIB_LOW ));
 		
 		// Net Switch
-		byteArrayOutputStream.write( ByteUtilsArt.in8toByte( 0 ) );
-		byteArrayOutputStream.write( ByteUtilsArt.in8toByte( 2 ) );
+		byteArrayOutputStream.write( Integer.parseInt(pControler.getNetwork(), 16) );
+		byteArrayOutputStream.write( Integer.parseInt(pControler.getSubNetwork(), 16) );
 
 		// Oem and UBEA
 		byteArrayOutputStream.write( ByteUtilsArt.hexStringToByteArray( "0x00ff" ) );

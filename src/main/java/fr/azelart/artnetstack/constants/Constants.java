@@ -33,7 +33,7 @@ public final class Constants {
 	public static final short SERVER_PORT = 0x1936;
 
 	/** IP Adress. */
-	public static final String SERVER_IP = "127.0.0.1";
+	public static final String SERVER_IP = "192.168.1.16";
 
 	/** Version 14. */
 	public static final int ART_NET_VERSION = 14;
