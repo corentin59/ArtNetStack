@@ -90,7 +90,7 @@ public class ServerStart {
 		thisControler.setPortTypeMap(vPorts);
 		
 		// Network
-		thisControler.setNetwork("0");
+		thisControler.setNetwork("00");
 		thisControler.setSubNetwork("D");
 	}
 	

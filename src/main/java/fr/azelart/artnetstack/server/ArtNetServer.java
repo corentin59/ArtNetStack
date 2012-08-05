@@ -36,7 +36,6 @@ import fr.azelart.artnetstack.domain.arttimecode.ArtTimeCode;
 import fr.azelart.artnetstack.listeners.ArtNetPacketListener;
 import fr.azelart.artnetstack.listeners.ServerListener;
 import fr.azelart.artnetstack.utils.ArtNetPacketDecoder;
-import fr.azelart.artnetstack.utils.ByteUtilsArt;
 
 /**
  * A Thread for the server.
@@ -125,7 +124,7 @@ public class ArtNetServer extends Thread implements Runnable {
 			inputDatagramPacket = new DatagramPacket(inputBuffer, inputBuffer.length);
 			try {
 				datagramSocket.receive(inputDatagramPacket);
-				vArtNetObject = ArtNetPacketDecoder.decodeArtNetPacket(inputDatagramPacket.getData());
+				vArtNetObject = ArtNetPacketDecoder.decodeArtNetPacket(inputDatagramPacket.getData(), inputDatagramPacket.getAddress());
 				
 				// It's realy an artnet packet.
 				if (vArtNetObject != null) {

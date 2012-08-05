@@ -51,6 +51,9 @@ public class ArtPollReply extends ArtNetObject {
 	/** Adress in network. */
 	private String subSwitch;
 	
+	/** Real ip address. */
+	private String physicalIp;
+
 	/** The ESTA manufacturer code. These codes are used to 
 	 * represent equipment manufacturer. They are assigned 
 	 * by ESTA. This field can be interpreted as two ASCII 
@@ -265,5 +268,20 @@ public class ArtPollReply extends ArtNetObject {
 	 */
 	public void setEsta(String esta) {
 		this.esta = esta;
+	}
+	
+	
+	/**
+	 * @return the physicalIp
+	 */
+	public String getPhysicalIp() {
+		return physicalIp;
+	}
+
+	/**
+	 * @param physicalIp the physicalIp to set
+	 */
+	public void setPhysicalIp(String physicalIp) {
+		this.physicalIp = physicalIp;
 	}
 }

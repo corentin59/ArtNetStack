@@ -37,7 +37,7 @@ import fr.azelart.artnetstack.domain.enums.UniverseAddressProgrammingAuthorityEn
  */
 public class ArtNetPacketDecoder {
 
-	public static ArtNetObject decodeArtNetPacket(byte[] packet) {
+	public static ArtNetObject decodeArtNetPacket(byte[] packet, InetAddress ip) {
 		
 		// The ArtNetPacket.
 		ArtNetObject artNetObject = null;
@@ -77,7 +77,7 @@ public class ArtNetPacketDecoder {
 			return decodeArtTimeCodePacket(packet, hexaBrut);
 		} else if (OpCodeConstants.OPPOLLREPLY.equals(opCode)) {
 			// ArtPollReply : This is a ArtPollReply packet.
-			return decodeArtPollReplyPacket(packet, hexaBrut);
+			return decodeArtPollReplyPacket(packet, hexaBrut, ip);
 		} else if (OpCodeConstants.OPOUTPUT.equals(opCode)) {
 			// ArtDMX
 			return decodeArtDMXPacket(packet, hexaBrut);
@@ -92,7 +92,7 @@ public class ArtNetPacketDecoder {
 	 * @param hexaBrut is the ascii data
 	 * @return ArtPollReply
 	 */
-	private static ArtPollReply decodeArtPollReplyPacket( byte[] bytes, String hexaBrut ) {
+	private static ArtPollReply decodeArtPollReplyPacket( byte[] bytes, String hexaBrut, InetAddress ip ) {
 		final ArtPollReply artPollReply = new ArtPollReply();
 
 		// IP Adress (4*8)
@@ -161,6 +161,9 @@ public class ArtNetPacketDecoder {
 		// Long Name
 		artPollReply.setLongName(new String (bytes, 44, 64));
 
+		// Real ip
+		artPollReply.setPhysicalIp( ip.getHostAddress() );
+		
 		return artPollReply;
 	}
 
