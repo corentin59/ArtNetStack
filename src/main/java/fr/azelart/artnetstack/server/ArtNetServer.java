@@ -36,6 +36,7 @@ import fr.azelart.artnetstack.domain.arttimecode.ArtTimeCode;
 import fr.azelart.artnetstack.listeners.ArtNetPacketListener;
 import fr.azelart.artnetstack.listeners.ServerListener;
 import fr.azelart.artnetstack.utils.ArtNetPacketDecoder;
+import fr.azelart.artnetstack.utils.ByteUtilsArt;
 
 /**
  * A Thread for the server.
@@ -70,6 +71,11 @@ public class ArtNetServer extends Thread implements Runnable {
 	private InetAddress inetAddressBroadcast = null;
 	
 	/**
+	 * Port.
+	 */
+	private int port;
+	
+	/**
 	 * Running.
 	 */
 	private boolean running = false; 
@@ -80,21 +86,22 @@ public class ArtNetServer extends Thread implements Runnable {
 	 * @throws SocketException if socket error
 	 * @throws UnknownHostException if we can't find the host.
 	 */
-	public ArtNetServer( InetAddress inetAdress ) throws SocketException, UnknownHostException {
+	public ArtNetServer( InetAddress inetAdress, int port ) throws SocketException, UnknownHostException {
 		listenersListPacket = new ArrayList<ArtNetPacketListener>();
 		listenersListServer = new ArrayList<ServerListener>();
-		datagramSocket = new DatagramSocket(Constants.SERVER_PORT);
+		datagramSocket = new DatagramSocket(port);
+		this.port = port;
 		this.inetAddress = inetAdress;
 		inetAddressBroadcast = getBroadcast(this.inetAddress);
 	}
-	
+
 	/**
 	 * Constructor of server.
 	 * @throws UnknownHostException
 	 * @throws SocketException
 	 */
 	public ArtNetServer() throws UnknownHostException, SocketException {
-		this(InetAddress.getByName(Constants.SERVER_IP));
+		this(InetAddress.getByName(Constants.SERVER_IP), Constants.SERVER_PORT);
 	}
 
 	/**
@@ -287,5 +294,13 @@ public class ArtNetServer extends Thread implements Runnable {
 	 */
 	public void setInetAddress(InetAddress inetAddress) {
 		this.inetAddress = inetAddress;
+	}
+	
+	
+	/**
+	 * @return the port
+	 */
+	public int getPort() {
+		return port;
 	}
 }

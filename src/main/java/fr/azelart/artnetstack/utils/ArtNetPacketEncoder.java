@@ -107,7 +107,7 @@ public final class ArtNetPacketEncoder {
 	 * @return the raw we can send
 	 * @throws IOException in error with byte array
 	 */
-	public static byte[] encodeArtPollReplyPacket( Controller pControler, InetAddress inetAdress ) throws IOException {
+	public static byte[] encodeArtPollReplyPacket( Controller pControler, InetAddress inetAdress, int port ) throws IOException {
 		final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
 		
 		// Prepare newt trame
@@ -125,7 +125,7 @@ public final class ArtNetPacketEncoder {
 		byteArrayOutputStream.write( inetAdress.getAddress() );
 		
 		// Port
-		byteArrayOutputStream.write( ByteUtilsArt.in16toByte( Constants.SERVER_PORT_HUMANS ) );
+		byteArrayOutputStream.write( ByteUtilsArt.in16toByte( port ) );
 		
 		// Version Hight
 		byteArrayOutputStream.write( ByteUtilsArt.in8toByte( Constants.VERSION_LIB_HIGHT ));

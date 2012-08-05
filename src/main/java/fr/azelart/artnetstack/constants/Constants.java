@@ -32,9 +32,6 @@ public final class Constants {
 	/** Server port. */
 	public static final short SERVER_PORT = 0x1936;
 
-	/** Server port for humans. */
-	public static final short SERVER_PORT_HUMANS = 1936;
-
 	/** IP Adress. */
 	public static final String SERVER_IP = "127.0.0.1";
 
