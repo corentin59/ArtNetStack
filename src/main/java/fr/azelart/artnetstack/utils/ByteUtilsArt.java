@@ -18,7 +18,7 @@ package fr.azelart.artnetstack.utils;
 public final class ByteUtilsArt {
 	
 	public static int byte2toIn( byte[] b, int offset ) {
-		return b[offset+1]<<8 | b[offset];
+		return (b[offset+1]&0xff)<<8 | (b[offset] & 0xff);
 		//return b[3]<<24 | b[2]<<16 | b[1]<<8 | b[0];
 	}
 	
