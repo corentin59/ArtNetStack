@@ -43,22 +43,22 @@ import fr.azelart.artnetstack.utils.ArtNetPacketDecoder;
  *
  */
 public class ArtNetServer extends Thread implements Runnable {
-	
+
 	/**
 	 * Socket communication.
 	 */
-	private DatagramSocket datagramSocket;
+	private final DatagramSocket datagramSocket;
 
 	/**
 	 * Listeners for packets.
 	 */
-	private List<ArtNetPacketListener> listenersListPacket;
+	private final List<ArtNetPacketListener> listenersListPacket;
 
 	/**
 	 * Listeners for server.
 	 */
-	private List<ServerListener> listenersListServer;
-	
+	private final List<ServerListener> listenersListServer;
+
 	/**
 	 * IP Server.
 	 */
@@ -68,55 +68,57 @@ public class ArtNetServer extends Thread implements Runnable {
 	 * Broadcast IP.
 	 */
 	private InetAddress inetAddressBroadcast = null;
-	
+
 	/**
 	 * Port.
 	 */
-	private int port;
-	
+	private final int port;
+
 	/**
 	 * Running.
 	 */
-	private boolean running = false; 
-	
+	private boolean running = false;
 
 	/**
-	 * Constructor of server.
-	 * @throws SocketException if socket error
+	 * Constructor.
 	 * @throws UnknownHostException if we can't find the host.
-	 */
-	public ArtNetServer( InetAddress inetAdress, int port ) throws SocketException, UnknownHostException {
-		listenersListPacket = new ArrayList<ArtNetPacketListener>();
-		listenersListServer = new ArrayList<ServerListener>();
-		datagramSocket = new DatagramSocket(port);
-		this.port = port;
-		this.inetAddress = inetAdress;
-		inetAddressBroadcast = getBroadcast(this.inetAddress);
-	}
-
-	/**
-	 * Constructor of server.
-	 * @throws UnknownHostException
-	 * @throws SocketException
+	 * @throws SocketException if socket error
 	 */
 	public ArtNetServer() throws UnknownHostException, SocketException {
 		this(InetAddress.getByName(Constants.SERVER_IP), Constants.SERVER_PORT);
 	}
 
 	/**
+	 * Constructor of server.
+	 * @param inetAddress is the address informations
+	 * @param port is the port
+	 * @throws SocketException if socket error
+	 * @throws UnknownHostException if we can't find the host.
+	 */
+	public ArtNetServer(final InetAddress inetAddress, final int port) throws SocketException, UnknownHostException {
+		listenersListPacket = new ArrayList<ArtNetPacketListener>();
+		listenersListServer = new ArrayList<ServerListener>();
+		datagramSocket = new DatagramSocket(port);
+		this.port = port;
+		this.inetAddress = inetAddress;
+		inetAddressBroadcast = getBroadcast(this.inetAddress);
+	}
+
+	/**
 	 * Server execution.
 	 */
-	public void run() {
+	@Override
+	public final void run() {
 		// Define inputDatagramPacket
 		DatagramPacket inputDatagramPacket = null;
 
 		// Define input byte buffer
-		byte[] inputBuffer = new byte[1024];
+		final byte[] inputBuffer = new byte[Constants.SERVER_BUFFER_INPUT];
 
 		// We inform than server is ready
 		running = true;
 		fireServerConnect();
-		
+
 		// ArtNet object
 		ArtNetObject vArtNetObject = null;
 
@@ -125,7 +127,7 @@ public class ArtNetServer extends Thread implements Runnable {
 			try {
 				datagramSocket.receive(inputDatagramPacket);
 				vArtNetObject = ArtNetPacketDecoder.decodeArtNetPacket(inputDatagramPacket.getData(), inputDatagramPacket.getAddress());
-				
+
 				// It's realy an artnet packet.
 				if (vArtNetObject != null) {
 					fireArtNet(vArtNetObject);
@@ -143,7 +145,7 @@ public class ArtNetServer extends Thread implements Runnable {
 						fireArtDMXReply((ArtDMX) vArtNetObject);
 					}
 				}
-			} catch (Exception e) {
+			} catch (final Exception e) {
 				e.getMessage();
 				e.printStackTrace();
 			}
@@ -152,16 +154,17 @@ public class ArtNetServer extends Thread implements Runnable {
 
 	/**
 	 * Get Broadcast Ip.
-	 * @return
-	 * @throws SocketException 
+	 * @param inetAddress is address informations
+	 * @return broadcast ip.
+	 * @throws SocketException in error when searching broadcast address
 	 */
-	private static InetAddress getBroadcast( InetAddress inetAddress ) throws SocketException {
+	private static InetAddress getBroadcast(final InetAddress inetAddress) throws SocketException {
 		final Enumeration<NetworkInterface> interfaces = NetworkInterface.getNetworkInterfaces();
 		NetworkInterface networkInterface = null;
 		while (interfaces.hasMoreElements()) {
 			networkInterface = interfaces.nextElement();
-			for (InterfaceAddress interfaceAddress : networkInterface.getInterfaceAddresses()) {
-				if ( interfaceAddress.getAddress().getHostAddress().equals( inetAddress.getHostAddress() ) ) {
+			for (final InterfaceAddress interfaceAddress : networkInterface.getInterfaceAddresses()) {
+				if (interfaceAddress.getAddress().getHostAddress().equals(inetAddress.getHostAddress())) {
 					return interfaceAddress.getBroadcast();
 				}
 			}
@@ -169,7 +172,7 @@ public class ArtNetServer extends Thread implements Runnable {
 		}
 		return null;
 	}
-	
+
 	/**
 	 * Stop server.
 	 */
@@ -179,7 +182,7 @@ public class ArtNetServer extends Thread implements Runnable {
 		datagramSocket.close();
 		fireServerTerminate();
 	}
-	
+
 	/**
 	 * Check if server is running.
 	 * @return yes if he run
@@ -190,18 +193,19 @@ public class ArtNetServer extends Thread implements Runnable {
 
 	/**
 	 * Send a packet.
-	 * @throws IOException
+	 * @param bytes is the packet data
+	 * @throws IOException if we can't send packet
 	 */
-	public final void sendPacket(  byte[] bytes ) throws IOException {
+	public final void sendPacket(final byte[] bytes) throws IOException {
 		final DatagramPacket packet = new DatagramPacket(bytes, bytes.length, inetAddressBroadcast, Constants.SERVER_PORT);
-		datagramSocket.send( packet );
+		datagramSocket.send(packet);
 	}
 
 	/**
 	 * We add an listener.
-	 * @param artNetPacketListener
+	 * @param serverListener is a server listener
 	 */
-	public final void addListenerServer( final ServerListener serverListener ) {
+	public final void addListenerServer(final ServerListener serverListener) {
 		this.listenersListServer.add(serverListener);
 	}
 
@@ -209,16 +213,16 @@ public class ArtNetServer extends Thread implements Runnable {
 	 * Server is connected.
 	 */
 	public final void fireServerConnect() {
-		for (ServerListener listener : this.listenersListServer) {
+		for (final ServerListener listener : this.listenersListServer) {
 			listener.onConnect();
 		}
 	}
-	
+
 	/**
 	 * Server is die.
 	 */
 	public final void fireServerTerminate() {
-		for (ServerListener listener : this.listenersListServer) {
+		for (final ServerListener listener : this.listenersListServer) {
 			listener.onTerminate();
 		}
 	}
@@ -236,7 +240,7 @@ public class ArtNetServer extends Thread implements Runnable {
 	 * @param artNetObject is the artPollPacket
 	 */
 	private void fireArtNet(final ArtNetObject artNetObject) {
-		for (ArtNetPacketListener listener : this.listenersListPacket) {
+		for (final ArtNetPacketListener listener : this.listenersListPacket) {
 			listener.onArt(artNetObject);
 		}
 	}
@@ -246,7 +250,7 @@ public class ArtNetServer extends Thread implements Runnable {
 	 * @param artPoll is the artPollPacket
 	 */
 	public final void fireArtPoll(final ArtPoll artPoll) {
-		for (ArtNetPacketListener listener : this.listenersListPacket) {
+		for (final ArtNetPacketListener listener : this.listenersListPacket) {
 			listener.onArtPoll(artPoll);
 		}
 	}
@@ -256,7 +260,7 @@ public class ArtNetServer extends Thread implements Runnable {
 	 * @param artTimeCode is the instance of the artTimeCodePacket
 	 */
 	public final void fireArtTimeCode(final ArtTimeCode artTimeCode) {
-		for (ArtNetPacketListener listener : this.listenersListPacket) {
+		for (final ArtNetPacketListener listener : this.listenersListPacket) {
 			listener.onArtTimeCode(artTimeCode);
 		}
 	}
@@ -266,7 +270,7 @@ public class ArtNetServer extends Thread implements Runnable {
 	 * @param artPollReply is the instance of the artPollReplyPacket
 	 */
 	public final void fireArtPollReply(final ArtPollReply artPollReply) {
-		for (ArtNetPacketListener listener : this.listenersListPacket) {
+		for (final ArtNetPacketListener listener : this.listenersListPacket) {
 			listener.onArtPollReply(artPollReply);
 		}
 	}
@@ -276,7 +280,7 @@ public class ArtNetServer extends Thread implements Runnable {
 	 * @param artDMX is the instance of the artDMX pakcet
 	 */
 	public final void fireArtDMXReply(final ArtDMX artDMX) {
-		for (ArtNetPacketListener listener : this.listenersListPacket) {
+		for (final ArtNetPacketListener listener : this.listenersListPacket) {
 			listener.onArtDMX(artDMX);
 		}
 	}
@@ -284,22 +288,22 @@ public class ArtNetServer extends Thread implements Runnable {
 	/**
 	 * @return the inetAddress
 	 */
-	public InetAddress getInetAddress() {
+	public final InetAddress getInetAddress() {
 		return inetAddress;
 	}
 
 	/**
 	 * @param inetAddress the inetAddress to set
 	 */
-	public void setInetAddress(InetAddress inetAddress) {
+	public final void setInetAddress(final InetAddress inetAddress) {
 		this.inetAddress = inetAddress;
 	}
-	
-	
+
+
 	/**
 	 * @return the port
 	 */
-	public int getPort() {
+	public final int getPort() {
 		return port;
 	}
 }

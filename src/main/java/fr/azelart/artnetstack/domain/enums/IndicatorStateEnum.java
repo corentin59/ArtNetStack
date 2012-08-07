@@ -21,16 +21,16 @@ package fr.azelart.artnetstack.domain.enums;
  *
  */
 public enum IndicatorStateEnum {
-	
+
 	/** Unknow. */
 	UNKNOW,
 
 	/** Locate mode. */
 	LOCATE_MODE,
-		
+
 	/** Mute mode. */
 	MUTE_MODE,
-	
+
 	/** Normal mode. */
 	NORMAL_MODE,
 }

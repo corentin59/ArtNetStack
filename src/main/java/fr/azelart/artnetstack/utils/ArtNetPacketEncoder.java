@@ -31,319 +31,315 @@ import fr.azelart.artnetstack.domain.controller.ControllerPortType;
 import fr.azelart.artnetstack.domain.enums.PortInputOutputEnum;
 import fr.azelart.artnetstack.domain.enums.PortTypeEnum;
 
-
 /**
- * Encoder for ArtNet Packets
- * @author Corentin Azelart.
+ * Encoder for ArtNet Packets.
+ * @author Corentin Azelart
  *
  */
 public final class ArtNetPacketEncoder {
-	
+
+	/** ArtPollCounter. */
 	private static Integer artPollCounter = 1;
 
 	/**
-	 * Build an ArtPollPacket.
-	 * @throws IOException 
+	 * Private constructor to respect checkstyle and protect class.
 	 */
-	public static byte[] encodeArtPollPacket( Controller pControler ) throws IOException {
+	private ArtNetPacketEncoder() {
+		super();
+	}
+
+	/**
+	 * Encode an ArtPoll packet.
+	 * @param controller is the controller
+	 * @throws IOException is the OutputStream have problem
+	 * @return the ArtPollPacket in array
+	 */
+	public static byte[] encodeArtPollPacket(final Controller controller) throws IOException {
 		final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-		byteArrayOutputStream.write(ByteUtils.toByta( Constants.ID ) );
+		byteArrayOutputStream.write(ByteUtils.toByta(Constants.ID));
 		byteArrayOutputStream.write(MagicNumbers.MAGIC_NUMBER_ZERO);
 		byteArrayOutputStream.write(MagicNumbers.MAGIC_NUMBER_ZERO);
-		byteArrayOutputStream.write(32);
+		byteArrayOutputStream.write(MagicNumbers.MAGIC_NUMBER_32);
 		byteArrayOutputStream.write(MagicNumbers.MAGIC_NUMBER_ZERO);
 		byteArrayOutputStream.write(new Integer(Constants.ART_NET_VERSION).byteValue());
-		byteArrayOutputStream.write(6);	// TalkToMe
+		byteArrayOutputStream.write(MagicNumbers.MAGIC_NUMBER_6);		// TalkToMe
 		byteArrayOutputStream.write(MagicNumbers.MAGIC_NUMBER_ZERO);	// Filler
-		
 		return byteArrayOutputStream.toByteArray();
 	}
-	
+
 	/**
-	 * Encode ArtTimeCode packet.
-	 * @param artTimeCode instance
-	 * @return a byte packet.
+	 * Encode an ArtTimeCode packet.
+	 * @param artTimeCode is timecode informations
 	 * @throws IOException in error with byte array
+	 * @return the ArtTimeCode in array
 	 */
-	public static byte[] encodeArtTimeCodePacket( ArtTimeCode artTimeCode ) throws IOException {
+	public static byte[] encodeArtTimeCodePacket(final ArtTimeCode artTimeCode) throws IOException {
 		final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-		
+
 		// ID.
-		byteArrayOutputStream.write( ByteUtils.toByta( Constants.ID ) );
-		byteArrayOutputStream.write( 0 );
-		
+		byteArrayOutputStream.write(ByteUtils.toByta(Constants.ID));
+		byteArrayOutputStream.write(MagicNumbers.MAGIC_NUMBER_ZERO);
+
 		// OpTimeCode
-		byteArrayOutputStream.write( ByteUtilsArt.in16toByte( 38656 ) );
-		
+		byteArrayOutputStream.write(ByteUtilsArt.in16toByte(38656));
+
 		// Version
 		byteArrayOutputStream.write(MagicNumbers.MAGIC_NUMBER_ZERO);
 		byteArrayOutputStream.write(new Integer(Constants.ART_NET_VERSION).byteValue());
-		
+
 		// Filler 1 and 2
 		byteArrayOutputStream.write(MagicNumbers.MAGIC_NUMBER_ZERO);
 		byteArrayOutputStream.write(MagicNumbers.MAGIC_NUMBER_ZERO);
-		
+
 		// Frame
-		byteArrayOutputStream.write( ByteUtilsArt.in8toByte( artTimeCode.getFrameTime() ) );
-		
+		byteArrayOutputStream.write(ByteUtilsArt.in8toByte(artTimeCode.getFrameTime()));
+
 		// Seconds
-		byteArrayOutputStream.write( ByteUtilsArt.in8toByte( artTimeCode.getSeconds() ) );
-		
+		byteArrayOutputStream.write(ByteUtilsArt.in8toByte(artTimeCode.getSeconds()));
+
 		// Minutes
-		byteArrayOutputStream.write( ByteUtilsArt.in8toByte( artTimeCode.getMinutes() ) );
-		
+		byteArrayOutputStream.write(ByteUtilsArt.in8toByte(artTimeCode.getMinutes()));
+
 		// Hours
-		byteArrayOutputStream.write( ByteUtilsArt.in8toByte( artTimeCode.getHours() ) );
-		
+		byteArrayOutputStream.write(ByteUtilsArt.in8toByte(artTimeCode.getHours()));
+
 		// Type
-		byteArrayOutputStream.write( ByteUtilsArt.in8toByte( artTimeCode.getArtTimeCodeType().ordinal() ) );
-		
+		byteArrayOutputStream.write(ByteUtilsArt.in8toByte(artTimeCode.getArtTimeCodeType().ordinal()));
+
 		return byteArrayOutputStream.toByteArray();
 	}
-	
+
 	/**
-	 * Encode a ArtPollReply packet.
-	 * @param pControler is a controller mapping.
-	 * @return the raw we can send
+	 * Encode an ArtPollReply packet.
+	 * @param controller is the controller
+	 * @param inetAdress is the address informations
+	 * @param port is the port information
 	 * @throws IOException in error with byte array
+	 * @return the ArtTimeCode in array
 	 */
-	public static byte[] encodeArtPollReplyPacket( Controller pControler, InetAddress inetAdress, int port ) throws IOException {
+	public static byte[] encodeArtPollReplyPacket(final Controller controller, final InetAddress inetAdress, final int port) throws IOException {
 		final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-		
+
 		// Prepare newt trame
 		artPollCounter++;
-		
+
 		// ID.
-		byteArrayOutputStream.write( ByteUtils.toByta( Constants.ID ) );
-		byteArrayOutputStream.write( 0 );
-		
+		byteArrayOutputStream.write(ByteUtils.toByta(Constants.ID));
+		byteArrayOutputStream.write(MagicNumbers.MAGIC_NUMBER_ZERO);
+
 		// ArtPollReply
-		byteArrayOutputStream.write( 0 );
-		byteArrayOutputStream.write( 33 );
+		byteArrayOutputStream.write(MagicNumbers.MAGIC_NUMBER_ZERO);
+		byteArrayOutputStream.write(MagicNumbers.MAGIC_NUMBER_33);
 
 		// IP
-		byteArrayOutputStream.write( inetAdress.getAddress() );
-		
+		byteArrayOutputStream.write(inetAdress.getAddress());
+
 		// Port
-		byteArrayOutputStream.write( ByteUtilsArt.in16toByte( port ) );
-		
+		byteArrayOutputStream.write(ByteUtilsArt.in16toByte(port));
+
 		// Version Hight
-		byteArrayOutputStream.write( ByteUtilsArt.in8toByte( Constants.VERSION_LIB_HIGHT ));
-		
+		byteArrayOutputStream.write(ByteUtilsArt.in8toByte(Constants.VERSION_LIB_HIGHT));
+
 		// Version Low
-		byteArrayOutputStream.write( ByteUtilsArt.in8toByte( Constants.VERSION_LIB_LOW ));
-		
+		byteArrayOutputStream.write(ByteUtilsArt.in8toByte(Constants.VERSION_LIB_LOW));
+
 		// Net Switch
-		byteArrayOutputStream.write( Integer.parseInt(pControler.getNetwork(), 16) );
-		byteArrayOutputStream.write( Integer.parseInt(pControler.getSubNetwork(), 16) );
+		byteArrayOutputStream.write(Integer.parseInt(controller.getNetwork(), MagicNumbers.MAGIC_NUMBER_16));
+		byteArrayOutputStream.write(Integer.parseInt(controller.getSubNetwork(), MagicNumbers.MAGIC_NUMBER_16));
 
 		// Oem and UBEA
-		byteArrayOutputStream.write( ByteUtilsArt.hexStringToByteArray( "0x00ff" ) );
-		
+		byteArrayOutputStream.write(ByteUtilsArt.hexStringToByteArray(("0x00ff")));
+
 		// Status1
-		byteArrayOutputStream.write( ByteUtilsArt.in8toByte( 199 ) );
-		
+		byteArrayOutputStream.write(ByteUtilsArt.in8toByte(MagicNumbers.MAGIC_NUMBER_199));
+
 		// Manufactor code
-		byteArrayOutputStream.write( ByteUtils.toByta( "CZ" ) );
-		
+		byteArrayOutputStream.write(ByteUtils.toByta("CZ"));
+
 		// ShotName
-		byteArrayOutputStream.write( ByteUtils.toByta( encodeString(Constants.SHORT_NAME, 18 ) ) );
-		
+		byteArrayOutputStream.write(ByteUtils.toByta(encodeString(Constants.SHORT_NAME, Constants.MAX_LENGTH_SHORT_NAME)));
+
 		// LongName
-		byteArrayOutputStream.write( ByteUtils.toByta( encodeString(Constants.LONG_NAME, 64 ) ) );
-		
+		byteArrayOutputStream.write(ByteUtils.toByta(encodeString(Constants.LONG_NAME, Constants.MAX_LENGTH_LONG_NAME)));
+
 		//Node report
 		final int vArtPollCounter = artPollCounter + 1;
 		final StringBuffer nodeReport = new StringBuffer();
-		nodeReport.append( "#" ).append( "0x0000" );	// Debug mode, see table 3
-		nodeReport.append( "[" ).append( vArtPollCounter ).append( "]" );
-		nodeReport.append( "ok" );
-		byteArrayOutputStream.write( ByteUtils.toByta( encodeString( nodeReport.toString(), 64 ) ) );
-		
+		nodeReport.append("#").append("0x0000");	// Debug mode, see table 3
+		nodeReport.append("[").append(vArtPollCounter).append("]");
+		nodeReport.append("ok");
+		byteArrayOutputStream.write(ByteUtils.toByta(encodeString(nodeReport.toString(), Constants.MAX_LENGTH_NODE_REPORT)));
+
 		// NumPortHi (0, future evolution of ArtNet protocol)
-		byteArrayOutputStream.write( ByteUtilsArt.in8toByte( 0 ) );
-		
+		byteArrayOutputStream.write(ByteUtilsArt.in8toByte(MagicNumbers.MAGIC_NUMBER_ZERO));
+
 		// NumPortLo (Between 0 and 4, max is 4)
-		byteArrayOutputStream.write( ByteUtilsArt.in8toByte( 4 ) );
-		
+		byteArrayOutputStream.write(ByteUtilsArt.in8toByte(MagicNumbers.MAGIC_NUMBER_4));
+
 		// Port Type
-		final Map<Integer, ControllerPortType> portsTypesMap = pControler.getPortTypeMap();
+		final Map<Integer, ControllerPortType> portsTypesMap = controller.getPortTypeMap();
 		ControllerPortType controlerPortType = null;
 		BitSet bitSet = null;
-		for ( int i=0; i!=Constants.MAX_PORT; i++ ) {
+		for (int i = 0; i != Constants.MAX_PORT; i++) {
 			controlerPortType = portsTypesMap.get(i);
 			// No port
-			if ( controlerPortType == null ) {
-				byteArrayOutputStream.write(ByteUtilsArt.in8toByte( 0 ));
+			if (controlerPortType == null) {
+				byteArrayOutputStream.write(ByteUtilsArt.in8toByte(MagicNumbers.MAGIC_NUMBER_ZERO));
 			} else {
-				bitSet = new BitSet(8);
+				bitSet = new BitSet(MagicNumbers.MAGIC_NUMBER_BITSET);
 				// First 4 bits (PROCOTOL)
-				if (controlerPortType.getType().equals( PortTypeEnum.DMX512 )) {
-					bitSet.set(0, 4, false);	// DMX
-				} else if ( controlerPortType.getType().equals( PortTypeEnum.MIDI )) {
-					bitSet.set(0, 3, false);	// MIDI
-					bitSet.set(4, true);		// MIDI
-				} else if ( controlerPortType.getType().equals( PortTypeEnum.AVAB )) {
-					bitSet.set(0, 2, false);	// AVAB
-					bitSet.set(3, true);		// AVAB
-					bitSet.set(4, false);		// AVAB
-				} else if ( controlerPortType.getType().equals( PortTypeEnum.COLORTRANCMX )) {
-					bitSet.set(0, 2, false);	// COLORTRAN
-					bitSet.set(3, 4, true);		// COLORTRAN
-				} else if ( controlerPortType.getType().equals( PortTypeEnum.ADB )) {
-					bitSet.set(0, 1, false);	// ADB
-					bitSet.set(2, true);		// ADB
-					bitSet.set(3, 4, false);	// ADB
-				} else if ( controlerPortType.getType().equals( PortTypeEnum.ARTNET )) {
-					bitSet.set(0, 1, false);	// ARTNET
-					bitSet.set(2, true);		// ARTNET
-					bitSet.set(3, false);		// ARTNET
-					bitSet.set(4, true);		// ARTNET
+				if (controlerPortType.getType().equals(PortTypeEnum.DMX512)) {
+					bitSet.set(MagicNumbers.MAGIC_NUMBER_BIT_0, MagicNumbers.MAGIC_NUMBER_BIT_4, false);	// DMX
+				} else if (controlerPortType.getType().equals(PortTypeEnum.MIDI)) {
+					bitSet.set(MagicNumbers.MAGIC_NUMBER_BIT_0, MagicNumbers.MAGIC_NUMBER_BIT_3, false);	// MIDI
+					bitSet.set(MagicNumbers.MAGIC_NUMBER_BIT_4, true);										// MIDI
+				} else if (controlerPortType.getType().equals(PortTypeEnum.AVAB)) {
+					bitSet.set(MagicNumbers.MAGIC_NUMBER_BIT_0, MagicNumbers.MAGIC_NUMBER_BIT_2, false);	// AVAB
+					bitSet.set(MagicNumbers.MAGIC_NUMBER_BIT_3, true);										// AVAB
+					bitSet.set(MagicNumbers.MAGIC_NUMBER_BIT_4, false);										// AVAB
+				} else if (controlerPortType.getType().equals(PortTypeEnum.COLORTRANCMX)) {
+					bitSet.set(MagicNumbers.MAGIC_NUMBER_BIT_0, MagicNumbers.MAGIC_NUMBER_BIT_2, false);	// COLORTRAN
+					bitSet.set(MagicNumbers.MAGIC_NUMBER_BIT_3, MagicNumbers.MAGIC_NUMBER_BIT_4, true);		// COLORTRAN
+				} else if (controlerPortType.getType().equals(PortTypeEnum.ADB)) {
+					bitSet.set(MagicNumbers.MAGIC_NUMBER_BIT_0, MagicNumbers.MAGIC_NUMBER_BIT_1, false);	// ADB
+					bitSet.set(MagicNumbers.MAGIC_NUMBER_BIT_2, true);										// ADB
+					bitSet.set(MagicNumbers.MAGIC_NUMBER_BIT_3, MagicNumbers.MAGIC_NUMBER_BIT_4, false);	// ADB
+				} else if (controlerPortType.getType().equals(PortTypeEnum.ARTNET)) {
+					bitSet.set(MagicNumbers.MAGIC_NUMBER_BIT_0, MagicNumbers.MAGIC_NUMBER_BIT_1, false);	// ARTNET
+					bitSet.set(MagicNumbers.MAGIC_NUMBER_BIT_2, true);										// ARTNET
+					bitSet.set(MagicNumbers.MAGIC_NUMBER_BIT_3, false);										// ARTNET
+					bitSet.set(MagicNumbers.MAGIC_NUMBER_BIT_4, true);										// ARTNET
 				}
 				// Set if this channel can input onto the Art-NetNetwork
-				bitSet.set(5, controlerPortType.isInputArtNet());
+				bitSet.set(MagicNumbers.MAGIC_NUMBER_BIT_5, controlerPortType.isInputArtNet());
 				// Set is this channel can output data from the Art-Net Network
-				bitSet.set(6, controlerPortType.isOutputArtNet());
+				bitSet.set(MagicNumbers.MAGIC_NUMBER_BIT_6, controlerPortType.isOutputArtNet());
 				byteArrayOutputStream.write(bitSet.toByteArray());
 			}
 		}
-		
+
 		// Good Input
-		final Map<Integer, ControllerGoodInput> portsGoodInputsMap = pControler.getGoodInputMapping();
+		final Map<Integer, ControllerGoodInput> portsGoodInputsMap = controller.getGoodInputMapping();
 		ControllerGoodInput controlerGoodInput = null;
-		for ( int i=0; i!=Constants.MAX_PORT; i++ ) {
+		for (int i = 0; i != Constants.MAX_PORT; i++) {
 			controlerGoodInput = portsGoodInputsMap.get(i);
 			// No port
-			if ( controlerGoodInput == null ) {
-				byteArrayOutputStream.write(ByteUtilsArt.in8toByte( 0 ));
+			if (controlerGoodInput == null) {
+				byteArrayOutputStream.write(ByteUtilsArt.in8toByte(MagicNumbers.MAGIC_NUMBER_ZERO));
 			} else {
-				bitSet = new BitSet(8);
-				bitSet.set(0, 1, false);	// Unused and transmitted as zero
-				bitSet.set(2, controlerGoodInput.getReceivedDataError() );
-				bitSet.set(3, controlerGoodInput.getDisabled() );
-				bitSet.set(4, controlerGoodInput.getIncludeDMXTextPackets() );
-				bitSet.set(5, controlerGoodInput.getIncludeDMXSIPsPackets() );
-				bitSet.set(6, controlerGoodInput.getIncludeDMXTestPackets() );
-				bitSet.set(7, controlerGoodInput.getDataReceived() );
+				bitSet = new BitSet(MagicNumbers.MAGIC_NUMBER_BITSET);
+				bitSet.set(MagicNumbers.MAGIC_NUMBER_BIT_0, MagicNumbers.MAGIC_NUMBER_BIT_1, false);	// Unused and transmitted as zero
+				bitSet.set(MagicNumbers.MAGIC_NUMBER_BIT_2, controlerGoodInput.getReceivedDataError());
+				bitSet.set(MagicNumbers.MAGIC_NUMBER_BIT_3, controlerGoodInput.getDisabled());
+				bitSet.set(MagicNumbers.MAGIC_NUMBER_BIT_4, controlerGoodInput.getIncludeDMXTextPackets());
+				bitSet.set(MagicNumbers.MAGIC_NUMBER_BIT_5, controlerGoodInput.getIncludeDMXSIPsPackets());
+				bitSet.set(MagicNumbers.MAGIC_NUMBER_BIT_6, controlerGoodInput.getIncludeDMXTestPackets());
+				bitSet.set(MagicNumbers.MAGIC_NUMBER_BIT_7, controlerGoodInput.getDataReceived());
 				byteArrayOutputStream.write(bitSet.toByteArray());
 			}
 		}
-		
+
 		// Good Ouput
-		final Map<Integer, ControllerGoodOutput> portsGoodOutputsMap = pControler.getGoodOutputMapping();
+		final Map<Integer, ControllerGoodOutput> portsGoodOutputsMap = controller.getGoodOutputMapping();
 		ControllerGoodOutput controlerGoodOutput = null;
-		for ( int i=0; i!=Constants.MAX_PORT; i++ ) {
+		for (int i = 0; i != Constants.MAX_PORT; i++) {
 			controlerGoodOutput = portsGoodOutputsMap.get(i);
 			// No port
-			if ( controlerGoodOutput == null ) {
-				byteArrayOutputStream.write(ByteUtilsArt.in8toByte( 0 ));
+			if (controlerGoodOutput == null) {
+				byteArrayOutputStream.write(ByteUtilsArt.in8toByte(MagicNumbers.MAGIC_NUMBER_ZERO));
 			} else {
-				bitSet = new BitSet(8);
-				bitSet.set(0, 1, false);	// Unused and transmitted as zero
-				bitSet.set(1, controlerGoodOutput.getMergeLTP() );
-				bitSet.set(2, controlerGoodOutput.getOutputPowerOn() );
-				bitSet.set(3, controlerGoodOutput.getOutputmergeArtNet() );
-				bitSet.set(4, controlerGoodOutput.getIncludeDMXTextPackets() );
-				bitSet.set(5, controlerGoodOutput.getIncludeDMXSIPsPackets() );
-				bitSet.set(6, controlerGoodOutput.getIncludeDMXTestPackets() );
-				bitSet.set(7, controlerGoodOutput.getDataTransmited() );
+				bitSet = new BitSet(MagicNumbers.MAGIC_NUMBER_BITSET);
+				bitSet.set(MagicNumbers.MAGIC_NUMBER_BIT_0, MagicNumbers.MAGIC_NUMBER_BIT_1, false);	// Unused and transmitted as zero
+				bitSet.set(MagicNumbers.MAGIC_NUMBER_BIT_1, controlerGoodOutput.getMergeLTP());
+				bitSet.set(MagicNumbers.MAGIC_NUMBER_BIT_2, controlerGoodOutput.getOutputPowerOn());
+				bitSet.set(MagicNumbers.MAGIC_NUMBER_BIT_3, controlerGoodOutput.getOutputmergeArtNet());
+				bitSet.set(MagicNumbers.MAGIC_NUMBER_BIT_4, controlerGoodOutput.getIncludeDMXTextPackets());
+				bitSet.set(MagicNumbers.MAGIC_NUMBER_BIT_5, controlerGoodOutput.getIncludeDMXSIPsPackets());
+				bitSet.set(MagicNumbers.MAGIC_NUMBER_BIT_6, controlerGoodOutput.getIncludeDMXTestPackets());
+				bitSet.set(MagicNumbers.MAGIC_NUMBER_BIT_7, controlerGoodOutput.getDataTransmited());
 				byteArrayOutputStream.write(bitSet.toByteArray());
 			}
 		}
-		
+
 		// Directions
-		BitSet bitSetIn; 
+		BitSet bitSetIn;
 		BitSet bitSetOut;
 		final ByteArrayOutputStream byteArrayInTempOutputStream = new ByteArrayOutputStream();
 		final ByteArrayOutputStream byteArrayOutTempOutputStream = new ByteArrayOutputStream();
-		for ( int i=0; i!=Constants.MAX_PORT; i++ ) {
+		for (int i = 0; i != Constants.MAX_PORT; i++) {
 			controlerPortType = portsTypesMap.get(i);
-			bitSetIn = new BitSet(8);
-			bitSetOut = new BitSet(8);
-			
+			bitSetIn = new BitSet(MagicNumbers.MAGIC_NUMBER_BITSET);
+			bitSetOut = new BitSet(MagicNumbers.MAGIC_NUMBER_BITSET);
+
 			// No port
-			if ( controlerPortType == null || controlerPortType.getDirection() == null ) {
+			if (controlerPortType == null || controlerPortType.getDirection() == null) {
 				bitSetIn.set(i, false);
 				bitSetOut.set(i, false);
-			} else if ( controlerPortType.getDirection().equals( PortInputOutputEnum.INPUT ) ) {
+			} else if (controlerPortType.getDirection().equals(PortInputOutputEnum.INPUT)) {
 				bitSetIn.set(i, true);
-			} else if ( controlerPortType.getDirection().equals( PortInputOutputEnum.OUTPUT ) ) {
+			} else if (controlerPortType.getDirection().equals(PortInputOutputEnum.OUTPUT)) {
 				bitSetOut.set(i, true);
-			} else if ( controlerPortType.getDirection().equals( PortInputOutputEnum.BOTH ) ) {
+			} else if (controlerPortType.getDirection().equals(PortInputOutputEnum.BOTH)) {
 				bitSetIn.set(i, true);
 				bitSetOut.set(i, true);
 			} else {
 				bitSetIn.set(i, false);
 				bitSetOut.set(i, false);
 			}
-			
-			
-			if ( bitSetIn.isEmpty() ) {
-				byteArrayInTempOutputStream.write(ByteUtilsArt.in8toByte( 0 ));
+
+
+			if (bitSetIn.isEmpty()) {
+				byteArrayInTempOutputStream.write(ByteUtilsArt.in8toByte(MagicNumbers.MAGIC_NUMBER_ZERO));
 			} else {
 				byteArrayInTempOutputStream.write(bitSetIn.toByteArray());
 			}
-			
-			if ( bitSetOut.isEmpty() ) {
-				byteArrayOutTempOutputStream.write(ByteUtilsArt.in8toByte( 0 ));
+
+			if (bitSetOut.isEmpty()) {
+				byteArrayOutTempOutputStream.write(ByteUtilsArt.in8toByte(MagicNumbers.MAGIC_NUMBER_ZERO));
 			} else {
 				byteArrayOutTempOutputStream.write(bitSetOut.toByteArray());
 			}
 		}
-		byteArrayOutputStream.write( byteArrayInTempOutputStream.toByteArray() );
-		byteArrayOutputStream.write( byteArrayOutTempOutputStream.toByteArray() );
-		
+		byteArrayOutputStream.write(byteArrayInTempOutputStream.toByteArray());
+		byteArrayOutputStream.write(byteArrayOutTempOutputStream.toByteArray());
+
 		// Screen
-		bitSet = new BitSet(8);
-		if ( pControler.getScreen() ) {
+		bitSet = new BitSet(MagicNumbers.MAGIC_NUMBER_BITSET);
+		if (controller.getScreen()) {
 			// Ethernet data display
 			bitSet.set(1, true);
-			byteArrayOutputStream.write( bitSet.toByteArray() );
-			
+			byteArrayOutputStream.write(bitSet.toByteArray());
+
 		} else {
 			// Local data display
-			byteArrayOutputStream.write( ByteUtilsArt.in8toByte( 0 ) );
+			byteArrayOutputStream.write(ByteUtilsArt.in8toByte(MagicNumbers.MAGIC_NUMBER_ZERO));
 		}
-		
+
 		// SwMacro (not implemented)
-		byteArrayOutputStream.write( ByteUtilsArt.in8toByte( 0 ) );
-		
+		byteArrayOutputStream.write(ByteUtilsArt.in8toByte(MagicNumbers.MAGIC_NUMBER_ZERO));
+
 		// SwRemote (not implemented)
-		byteArrayOutputStream.write( ByteUtilsArt.in8toByte( 0 ) );
-		
+		byteArrayOutputStream.write(ByteUtilsArt.in8toByte(MagicNumbers.MAGIC_NUMBER_ZERO));
+
 		// Spare (1+2+3), Not used, set to zero
-		byteArrayOutputStream.write( ByteUtilsArt.in8toByte( 0 ) );
-		byteArrayOutputStream.write( ByteUtilsArt.in8toByte( 0 ) );
-		byteArrayOutputStream.write( ByteUtilsArt.in8toByte( 0 ) );
-		byteArrayOutputStream.write( ByteUtilsArt.in8toByte( 0 ) );
-		
+		byteArrayOutputStream.write(ByteUtilsArt.in8toByte(MagicNumbers.MAGIC_NUMBER_ZERO));
+		byteArrayOutputStream.write(ByteUtilsArt.in8toByte(MagicNumbers.MAGIC_NUMBER_ZERO));
+		byteArrayOutputStream.write(ByteUtilsArt.in8toByte(MagicNumbers.MAGIC_NUMBER_ZERO));
+		byteArrayOutputStream.write(ByteUtilsArt.in8toByte(MagicNumbers.MAGIC_NUMBER_ZERO));
+
 		// Style
-		/*
-		if ( pControler instanceof ControllerNode ) {
-			byteArrayOutputStream.write( ByteUtilsArt.in8toByte( StyleConstants.ST_NODE ) );
-		} else if ( pControler instanceof ControllerController ) {
-			byteArrayOutputStream.write( ByteUtilsArt.in8toByte( StyleConstants.ST_CONTROLLER ) );
-		} else if ( pControler instanceof ControllerMedia ) {
-			byteArrayOutputStream.write( ByteUtilsArt.in8toByte( StyleConstants.ST_MEDIA ) );
-		} else if ( pControler instanceof ControllerRoute ) {
-			byteArrayOutputStream.write( ByteUtilsArt.in8toByte( StyleConstants.ST_ROUTE ) );
-		} else if ( pControler instanceof ControllerBackup ) {
-			byteArrayOutputStream.write( ByteUtilsArt.in8toByte( StyleConstants.ST_BACKUP ) );
-		} else if ( pControler instanceof ControllerConfig ) {
-			byteArrayOutputStream.write( ByteUtilsArt.in8toByte( StyleConstants.ST_CONFIG ) );
-		} else if ( pControler instanceof ControllerVisual ) {
-			byteArrayOutputStream.write( ByteUtilsArt.in8toByte( StyleConstants.ST_VISUAL ) );
-		}*/
-		
+		// TODO
+
 		// MAC
-		byteArrayOutputStream.write( ByteUtilsArt.in8toByte( 0 ) );
-		byteArrayOutputStream.write( ByteUtilsArt.in8toByte( 0 ) );
-		byteArrayOutputStream.write( ByteUtilsArt.in8toByte( 0 ) );
-		byteArrayOutputStream.write( ByteUtilsArt.in8toByte( 0 ) );
-		byteArrayOutputStream.write( ByteUtilsArt.in8toByte( 0 ) );
-		byteArrayOutputStream.write( ByteUtilsArt.in8toByte( 0 ) );
-		byteArrayOutputStream.write( ByteUtilsArt.in8toByte( 0 ) );
-		
+		// TODO : Implement it.
+		byteArrayOutputStream.write(ByteUtilsArt.in8toByte(MagicNumbers.MAGIC_NUMBER_ZERO));
+		byteArrayOutputStream.write(ByteUtilsArt.in8toByte(MagicNumbers.MAGIC_NUMBER_ZERO));
+		byteArrayOutputStream.write(ByteUtilsArt.in8toByte(MagicNumbers.MAGIC_NUMBER_ZERO));
+		byteArrayOutputStream.write(ByteUtilsArt.in8toByte(MagicNumbers.MAGIC_NUMBER_ZERO));
+		byteArrayOutputStream.write(ByteUtilsArt.in8toByte(MagicNumbers.MAGIC_NUMBER_ZERO));
+		byteArrayOutputStream.write(ByteUtilsArt.in8toByte(MagicNumbers.MAGIC_NUMBER_ZERO));
+		byteArrayOutputStream.write(ByteUtilsArt.in8toByte(MagicNumbers.MAGIC_NUMBER_ZERO));
+
 		return byteArrayOutputStream.toByteArray();
 	}
 
@@ -353,11 +349,11 @@ public final class ArtNetPacketEncoder {
 	 * @param size is max size
 	 * @return the string
 	 */
-	private static String encodeString( String text, int size ) {
+	private static String encodeString(final String text, final int size) {
 		final StringBuffer sb = new StringBuffer();
-		sb.append( text );
-		for ( int i=text.length(); i!=size; i++ ) {
-			sb.append( " " );
+		sb.append(text);
+		for (int i = text.length(); i != size; i++) {
+			sb.append(" ");
 		}
 		return sb.toString();
 	}

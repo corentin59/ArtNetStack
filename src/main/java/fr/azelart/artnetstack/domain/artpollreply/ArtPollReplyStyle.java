@@ -21,25 +21,25 @@ package fr.azelart.artnetstack.domain.artpollreply;
  *
  */
 public enum ArtPollReplyStyle {
-	
+
 	/** A DMX to / from Art-Net device. */
 	ST_NODE,
-	
+
 	/** A lighting console. */
 	ST_CONTROLLER,
-	
+
 	/** A Media Server. */
 	ST_MEDIA,
-	
+
 	/** A network routing device. */
 	ST_ROUTE,
-	
+
 	/** A backup device. */
 	ST_BACKUP,
-	
+
 	/** A configuration or diagnostic tool. */
 	ST_CONFIG,
-	
+
 	/** A visualiser. */
 	ST_VISUAL
 }

@@ -23,265 +23,267 @@ import fr.azelart.artnetstack.domain.artnet.ArtNetObject;
  *
  */
 public class ArtPollReply extends ArtNetObject {
-	
+
 	/** Adress IP. */
 	private String ip;
-	
+
 	/** Port. */
 	private int port;
-	
+
 	/** Version High. */
 	private int versionH;
-	
+
 	/** Version Low. */
 	private int versionL;
-	
+
 	/** Hexa Oem. */
 	private String oemHexa;
-	
+
 	/** UBEA Version. */
 	private int ubeaVersion;
-	
+
 	/** ArtPollReply status. */
 	private ArtPollReplyStatus artPollReplyStatus;
-	
+
 	/** Network. */
 	private String subNet;
-	
+
 	/** Adress in network. */
 	private String subSwitch;
-	
+
 	/** Real ip address. */
 	private String physicalIp;
 
-	/** The ESTA manufacturer code. These codes are used to 
-	 * represent equipment manufacturer. They are assigned 
-	 * by ESTA. This field can be interpreted as two ASCII 
+	/** The ESTA manufacturer code. These codes are used to
+	 * represent equipment manufacturer. They are assigned
+	 * by ESTA. This field can be interpreted as two ASCII
 	 * bytes representing the manufacturer initials.
 	 */
 	private String esta;
-	
+
 	/**
-	 * The array represents a null terminated short name for 
-	 * the Node. The Controller uses the ArtAddress packet 
-	 * to program this string. Max length is 17 characters 
-	 * plus the null. This is a fixed length field, although the 
+	 * The array represents a null terminated short name for
+	 * the Node. The Controller uses the ArtAddress packet
+	 * to program this string. Max length is 17 characters
+	 * plus the null. This is a fixed length field, although the
 	 * string it contains can be shorter than the field.
 	 */
 	private String shortName;
-	
+
 	/**
-	 * The array represents a null terminated long name for 
-	 * the Node. The Controller uses the ArtAddress packet 
-	 * to program this string. Max length is 63 characters 
-	 * plus the null. This is a fixed length field, although the 
+	 * The array represents a null terminated long name for
+	 * the Node. The Controller uses the ArtAddress packet
+	 * to program this string. Max length is 63 characters
+	 * plus the null. This is a fixed length field, although the
 	 * string it contains can be shorter than the field.
 	 */
 	private String longName;
-	
+
 	/**
-	 * The Style code defines the equipment style of the 
-	 * device. See Table 4 for current Style codes. 
+	 * The Style code defines the equipment style of the
+	 * device. See Table 4 for current Style codes.
 	 */
 	private ArtPollReplyStyle artPollReplyStyle;
-	
+
 	/**
-	 * toString
+	 * toString.
+	 * @return a representation of this packet
 	 */
-	public String toString() {
+	@Override
+	public final String toString() {
 		final StringBuilder sb = new StringBuilder();
-		sb.append("ArtPollReply[ip=").append( ip ).append(",longName").append(longName).append("]");
+		sb.append("ArtPollReply[ip=").append(ip).append(",longName").append(longName).append("]");
 		return sb.toString();
 	}
 
 	/**
 	 * @return the artPollReplyStyle
 	 */
-	public ArtPollReplyStyle getArtPollReplyStyle() {
+	public final ArtPollReplyStyle getArtPollReplyStyle() {
 		return artPollReplyStyle;
 	}
 
 	/**
 	 * @param artPollReplyStyle the artPollReplyStyle to set
 	 */
-	public void setArtPollReplyStyle(ArtPollReplyStyle artPollReplyStyle) {
+	public final void setArtPollReplyStyle(final ArtPollReplyStyle artPollReplyStyle) {
 		this.artPollReplyStyle = artPollReplyStyle;
 	}
 
 	/**
 	 * @return the ip
 	 */
-	public String getIp() {
+	public final String getIp() {
 		return ip;
 	}
 
 	/**
 	 * @param ip the ip to set
 	 */
-	public void setIp(String ip) {
+	public final void setIp(final String ip) {
 		this.ip = ip;
 	}
 
 	/**
 	 * @return the port
 	 */
-	public int getPort() {
+	public final int getPort() {
 		return port;
 	}
 
 	/**
 	 * @param port the port to set
 	 */
-	public void setPort(int port) {
+	public final void setPort(final int port) {
 		this.port = port;
 	}
 
 	/**
 	 * @return the versionH
 	 */
-	public int getVersionH() {
+	public final int getVersionH() {
 		return versionH;
 	}
 
 	/**
 	 * @param versionH the versionH to set
 	 */
-	public void setVersionH(int versionH) {
+	public final void setVersionH(final int versionH) {
 		this.versionH = versionH;
 	}
 
 	/**
 	 * @return the versionL
 	 */
-	public int getVersionL() {
+	public final int getVersionL() {
 		return versionL;
 	}
 
 	/**
 	 * @param versionL the versionL to set
 	 */
-	public void setVersionL(int versionL) {
+	public final void setVersionL(final int versionL) {
 		this.versionL = versionL;
 	}
 
 	/**
 	 * @return the oemHexa
 	 */
-	public String getOemHexa() {
+	public final String getOemHexa() {
 		return oemHexa;
 	}
 
 	/**
 	 * @param oemHexa the oemHexa to set
 	 */
-	public void setOemHexa(String oemHexa) {
+	public final void setOemHexa(final String oemHexa) {
 		this.oemHexa = oemHexa;
 	}
 
 	/**
 	 * @return the ubeaVersion
 	 */
-	public int getUbeaVersion() {
+	public final int getUbeaVersion() {
 		return ubeaVersion;
 	}
 
 	/**
 	 * @param ubeaVersion the ubeaVersion to set
 	 */
-	public void setUbeaVersion(int ubeaVersion) {
+	public final void setUbeaVersion(final int ubeaVersion) {
 		this.ubeaVersion = ubeaVersion;
 	}
 
-	public ArtPollReplyStatus getArtPollReplyStatus() {
+	public final ArtPollReplyStatus getArtPollReplyStatus() {
 		return artPollReplyStatus;
 	}
 
-	public void setArtPollReplyStatus(ArtPollReplyStatus artPollReplyStatus) {
+	public final void setArtPollReplyStatus(final ArtPollReplyStatus artPollReplyStatus) {
 		this.artPollReplyStatus = artPollReplyStatus;
 	}
 
 	/**
 	 * @return the subNet
 	 */
-	public String getSubNet() {
+	public final String getSubNet() {
 		return subNet;
 	}
 
 	/**
 	 * @param subNet the subNet to set
 	 */
-	public void setSubNet(String subNet) {
+	public final void setSubNet(final String subNet) {
 		this.subNet = subNet;
 	}
 
 	/**
 	 * @return the subSwitch
 	 */
-	public String getSubSwitch() {
+	public final String getSubSwitch() {
 		return subSwitch;
 	}
 
 	/**
 	 * @param subSwitch the subSwitch to set
 	 */
-	public void setSubSwitch(String subSwitch) {
+	public final void setSubSwitch(final String subSwitch) {
 		this.subSwitch = subSwitch;
 	}
 
 	/**
 	 * @return the shortName
 	 */
-	public String getShortName() {
+	public final String getShortName() {
 		return shortName;
 	}
 
 	/**
 	 * @param shortName the shortName to set
 	 */
-	public void setShortName(String shortName) {
+	public final void setShortName(final String shortName) {
 		this.shortName = shortName;
 	}
 
 	/**
 	 * @return the longName
 	 */
-	public String getLongName() {
+	public final String getLongName() {
 		return longName;
 	}
 
 	/**
 	 * @param longName the longName to set
 	 */
-	public void setLongName(String longName) {
+	public final void setLongName(final String longName) {
 		this.longName = longName;
 	}
 
 	/**
 	 * @return the esta
 	 */
-	public String getEsta() {
+	public final String getEsta() {
 		return esta;
 	}
 
 	/**
 	 * @param esta the esta to set
 	 */
-	public void setEsta(String esta) {
+	public final void setEsta(final String esta) {
 		this.esta = esta;
 	}
-	
-	
+
+
 	/**
 	 * @return the physicalIp
 	 */
-	public String getPhysicalIp() {
+	public final String getPhysicalIp() {
 		return physicalIp;
 	}
 
 	/**
 	 * @param physicalIp the physicalIp to set
 	 */
-	public void setPhysicalIp(String physicalIp) {
+	public final void setPhysicalIp(final String physicalIp) {
 		this.physicalIp = physicalIp;
 	}
 }

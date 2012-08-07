@@ -15,8 +15,7 @@
  */
 package fr.azelart.artnetstack.domain.artdmx;
 
-import java.io.BufferedWriter;
-
+import fr.azelart.artnetstack.constants.Constants;
 import fr.azelart.artnetstack.domain.artnet.ArtNetObject;
 
 /**
@@ -25,7 +24,7 @@ import fr.azelart.artnetstack.domain.artnet.ArtNetObject;
  *
  */
 public class ArtDMX extends ArtNetObject {
-	
+
 	/**
 	 * The sequence number is used to ensure that ArtDmx
 	 * packets are used in the correct order. When Art-Net is
@@ -84,6 +83,7 @@ public class ArtDMX extends ArtNetObject {
 	 * ToString method.
 	 * @return a textual representation
 	 */
+	@Override
 	public final String toString() {
 		final StringBuilder vSb = new StringBuilder();
 		vSb.append("ArtDMX[sequence=");
@@ -96,9 +96,9 @@ public class ArtDMX extends ArtNetObject {
 			vSb.append(",C0=");
 			vSb.append(data[0]);
 		}
-		if (data.length >= 512) {
+		if (data.length >= Constants.DMX_512_SIZE) {
 			vSb.append(",C512=");
-			vSb.append(data[511]);
+			vSb.append(data[Constants.DMX_512_SIZE - 1]);
 		}
 		vSb.append("]");
 		return vSb.toString();
