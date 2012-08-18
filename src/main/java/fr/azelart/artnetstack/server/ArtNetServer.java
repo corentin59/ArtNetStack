@@ -193,8 +193,10 @@ public class ArtNetServer extends Thread implements Runnable {
 	 * @throws IOException
 	 */
 	public final void sendPacket(  byte[] bytes ) throws IOException {
-		final DatagramPacket packet = new DatagramPacket(bytes, bytes.length, inetAddressBroadcast, Constants.SERVER_PORT);
-		datagramSocket.send( packet );
+		if(datagramSocket!=null) {
+			final DatagramPacket packet = new DatagramPacket(bytes, bytes.length, inetAddressBroadcast, Constants.SERVER_PORT);
+			datagramSocket.send( packet );
+		}
 	}
 
 	/**
