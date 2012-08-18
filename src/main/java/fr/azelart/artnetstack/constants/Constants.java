@@ -61,4 +61,19 @@ public final class Constants {
 
 	/** Integer escape. */
 	public static final int INT_ESCAP = 0xff;
+
+	/** Max length for short name. */
+	public static final int MAX_LENGTH_SHORT_NAME = 18;
+
+	/** Max length for long name. */
+	public static final int MAX_LENGTH_LONG_NAME = 64;
+
+	/** Max length for node report. */
+	public static final int MAX_LENGTH_NODE_REPORT = 64;
+
+	/** DMX Data value : 512. */
+	public static final int DMX_DATA_LENGTH = 512;
+
+	/** Buffer of datagramm trames. */
+	public static final int SERVER_BUFFER_INPUT = 1024;
 }

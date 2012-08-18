@@ -23,22 +23,22 @@ import fr.azelart.artnetstack.domain.enums.UniverseAddressProgrammingAuthorityEn
  * @author Corentin Azelart.
  */
 public class ArtPollReplyStatus {
-	
+
 	/** UBEA is present. */
 	private Boolean ubeaPresent;
-	
+
 	/** RDM Available. */
 	private Boolean rdmCapable;
-	
+
 	/** Device is booted from ROM. */
 	private Boolean bootRom;
-	
+
 	/** Programming authority. */
 	private UniverseAddressProgrammingAuthorityEnum programmingAuthority;
 
 	/** Indicator state. */
 	private IndicatorStateEnum indicatorState;
-	
+
 	/**
 	 * Constructor.
 	 */
@@ -49,71 +49,71 @@ public class ArtPollReplyStatus {
 	/**
 	 * @return the ubeaPresent
 	 */
-	public Boolean getUbeaPresent() {
+	public final Boolean getUbeaPresent() {
 		return ubeaPresent;
 	}
 
 	/**
 	 * @param ubeaPresent the ubeaPresent to set
 	 */
-	public void setUbeaPresent(Boolean ubeaPresent) {
+	public final void setUbeaPresent(final Boolean ubeaPresent) {
 		this.ubeaPresent = ubeaPresent;
 	}
 
 	/**
 	 * @return the rdmCapable
 	 */
-	public Boolean getRdmCapable() {
+	public final Boolean getRdmCapable() {
 		return rdmCapable;
 	}
 
 	/**
 	 * @param rdmCapable the rdmCapable to set
 	 */
-	public void setRdmCapable(Boolean rdmCapable) {
+	public final void setRdmCapable(final Boolean rdmCapable) {
 		this.rdmCapable = rdmCapable;
 	}
 
 	/**
 	 * @return the bootRom
 	 */
-	public Boolean getBootRom() {
+	public final Boolean getBootRom() {
 		return bootRom;
 	}
 
 	/**
 	 * @param bootRom the bootRom to set
 	 */
-	public void setBootRom(Boolean bootRom) {
+	public final void setBootRom(final Boolean bootRom) {
 		this.bootRom = bootRom;
 	}
 
 	/**
 	 * @return the programmingAuthority
 	 */
-	public UniverseAddressProgrammingAuthorityEnum getProgrammingAuthority() {
+	public final UniverseAddressProgrammingAuthorityEnum getProgrammingAuthority() {
 		return programmingAuthority;
 	}
 
 	/**
 	 * @param programmingAuthority the programmingAuthority to set
 	 */
-	public void setProgrammingAuthority(
-			UniverseAddressProgrammingAuthorityEnum programmingAuthority) {
+	public final void setProgrammingAuthority(
+			final UniverseAddressProgrammingAuthorityEnum programmingAuthority) {
 		this.programmingAuthority = programmingAuthority;
 	}
 
 	/**
 	 * @return the indicatorState
 	 */
-	public IndicatorStateEnum getIndicatorState() {
+	public final IndicatorStateEnum getIndicatorState() {
 		return indicatorState;
 	}
 
 	/**
 	 * @param indicatorState the indicatorState to set
 	 */
-	public void setIndicatorState(IndicatorStateEnum indicatorState) {
+	public final void setIndicatorState(final IndicatorStateEnum indicatorState) {
 		this.indicatorState = indicatorState;
 	}
 }

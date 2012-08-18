@@ -21,16 +21,16 @@ package fr.azelart.artnetstack.domain.enums;
  *
  */
 public enum UniverseAddressProgrammingAuthorityEnum {
-	
+
 	/** Universe Programming Authority unknown. */
 	UNKNOW,
 
 	/** Set by Front panel. */
 	FRONT_PANEL,
-		
+
 	/** Set by network. */
 	NETWORK,
-	
+
 	/** Not in use. */
 	NOT_USED,
 }

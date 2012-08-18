@@ -27,31 +27,30 @@ import fr.azelart.artnetstack.domain.enums.PriorityCodesEnum;
 public class ArtPoll extends ArtNetObject {
 
 	/**
-	 * Send ArtPollReply whenever Node conditions 
-	 * change. This selection allows the Controller to be 
+	 * Send ArtPollReply whenever Node conditions
+	 * change. This selection allows the Controller to be
 	 * informed of changes without the need to continuously poll.
-	 * 
 	 * If false :
 	 * Only send ArtPollReply in response to an ArtPoll or ArtAddress.
 	 */
 	private Boolean artPollReplyWhenConditionsChanges;
-	
+
 	/**
 	 * Send me diagnostics messages.
 	 */
 	private Boolean sendMeDiagnosticsMessage;
-	
+
 	/**
 	 * Diagnostics messages are broadcast or unicast.
 	 */
 	private NetworkCommunicationTypeEnum networkCommunicationTypeDiagnosticsMessages;
-	
+
 	/**
-	 * Prority codes
+	 * Prority codes.
 	 */
-	private PriorityCodesEnum priorityCodes;	
-	
-	
+	private PriorityCodesEnum priorityCodes;
+
+
 	/**
 	 * Constructor.
 	 */
@@ -63,7 +62,7 @@ public class ArtPoll extends ArtNetObject {
 	/**
 	 * @return the artPollReplyWhenConditionsChanges
 	 */
-	public Boolean getArtPollReplyWhenConditionsChanges() {
+	public final Boolean getArtPollReplyWhenConditionsChanges() {
 		return artPollReplyWhenConditionsChanges;
 	}
 
@@ -71,8 +70,8 @@ public class ArtPoll extends ArtNetObject {
 	/**
 	 * @param artPollReplyWhenConditionsChanges the artPollReplyWhenConditionsChanges to set
 	 */
-	public void setArtPollReplyWhenConditionsChanges(
-			Boolean artPollReplyWhenConditionsChanges) {
+	public final void setArtPollReplyWhenConditionsChanges(
+			final Boolean artPollReplyWhenConditionsChanges) {
 		this.artPollReplyWhenConditionsChanges = artPollReplyWhenConditionsChanges;
 	}
 
@@ -80,7 +79,7 @@ public class ArtPoll extends ArtNetObject {
 	/**
 	 * @return the sendMeDiagnosticsMessage
 	 */
-	public Boolean getSendMeDiagnosticsMessage() {
+	public final Boolean getSendMeDiagnosticsMessage() {
 		return sendMeDiagnosticsMessage;
 	}
 
@@ -88,7 +87,7 @@ public class ArtPoll extends ArtNetObject {
 	/**
 	 * @param sendMeDiagnosticsMessage the sendMeDiagnosticsMessage to set
 	 */
-	public void setSendMeDiagnosticsMessage(Boolean sendMeDiagnosticsMessage) {
+	public final void setSendMeDiagnosticsMessage(final Boolean sendMeDiagnosticsMessage) {
 		this.sendMeDiagnosticsMessage = sendMeDiagnosticsMessage;
 	}
 
@@ -96,7 +95,7 @@ public class ArtPoll extends ArtNetObject {
 	/**
 	 * @return the networkCommunicationTypeDiagnosticsMessages
 	 */
-	public NetworkCommunicationTypeEnum getNetworkCommunicationTypeDiagnosticsMessages() {
+	public final NetworkCommunicationTypeEnum getNetworkCommunicationTypeDiagnosticsMessages() {
 		return networkCommunicationTypeDiagnosticsMessages;
 	}
 
@@ -104,8 +103,8 @@ public class ArtPoll extends ArtNetObject {
 	/**
 	 * @param networkCommunicationTypeDiagnosticsMessages the networkCommunicationTypeDiagnosticsMessages to set
 	 */
-	public void setNetworkCommunicationTypeDiagnosticsMessages(
-			NetworkCommunicationTypeEnum networkCommunicationTypeDiagnosticsMessages) {
+	public final void setNetworkCommunicationTypeDiagnosticsMessages(
+			final NetworkCommunicationTypeEnum networkCommunicationTypeDiagnosticsMessages) {
 		this.networkCommunicationTypeDiagnosticsMessages = networkCommunicationTypeDiagnosticsMessages;
 	}
 
@@ -113,7 +112,7 @@ public class ArtPoll extends ArtNetObject {
 	/**
 	 * @return the priorityCodes
 	 */
-	public PriorityCodesEnum getPriorityCodes() {
+	public final PriorityCodesEnum getPriorityCodes() {
 		return priorityCodes;
 	}
 
@@ -121,7 +120,7 @@ public class ArtPoll extends ArtNetObject {
 	/**
 	 * @param priorityCodes the priorityCodes to set
 	 */
-	public void setPriorityCodes(PriorityCodesEnum priorityCodes) {
+	public final void setPriorityCodes(final PriorityCodesEnum priorityCodes) {
 		this.priorityCodes = priorityCodes;
 	}
 }

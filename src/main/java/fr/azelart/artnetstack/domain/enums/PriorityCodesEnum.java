@@ -27,14 +27,14 @@ public enum PriorityCodesEnum {
 
 	/** Medium. */
 	DP_MEDIUM,
-	
+
 	/** High. */
 	DP_HIGH,
-	
+
 	/** Critical. */
 	DP_CRITICAL,
-	
+
 	/** Volatile (just displayed on one line). */
 	DP_VOLATILE,
-	
+
 }

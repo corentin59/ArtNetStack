@@ -24,15 +24,6 @@ import fr.azelart.artnetstack.domain.artnet.ArtNetObject;
  * @author Corentin Azelart.
  */
 public class Controller extends ArtNetObject {
-	
-	/** Diffusion for diagnostic messages. */
-	//private DiagnosticMessageEnum diagnosticMessageDiffusion;
-
-	/** Send diagnostic message. */
-	//private DiagnosticMessageEnumAvailable diagnosticMessageAvailable;
-
-	/** ArtPoll reply strategy. */
-	//private  ArtPollReplyStrategyEnum artPollStrategie;
 
 	/** Port mapping. */
 	private Map<Integer, ControllerPortType> portTypeMap;
@@ -48,12 +39,12 @@ public class Controller extends ArtNetObject {
 	 * Set to true when video is showing ethernet data.
 	 */
 	private Boolean screen;
-	
+
 	/**
 	 * Network.
 	 */
 	private String network;
-	
+
 	/**
 	 * Subnetwork.
 	 */
@@ -120,7 +111,7 @@ public class Controller extends ArtNetObject {
 	 * Set to true when video is showing ethernet data.
 	 * @param screen the screen to set
 	 */
-	public final void setScreen(Boolean screen) {
+	public final void setScreen(final Boolean screen) {
 		this.screen = screen;
 	}
 
@@ -134,7 +125,7 @@ public class Controller extends ArtNetObject {
 	/**
 	 * @param network the network to set
 	 */
-	public void setNetwork(String network) {
+	public void setNetwork(final String network) {
 		this.network = network;
 	}
 
@@ -148,7 +139,7 @@ public class Controller extends ArtNetObject {
 	/**
 	 * @param subNetwork the subNetwork to set
 	 */
-	public void setSubNetwork(String subNetwork) {
+	public void setSubNetwork(final String subNetwork) {
 		this.subNetwork = subNetwork;
 	}
 }
