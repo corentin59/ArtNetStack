@@ -21,8 +21,8 @@ Currently supported events features are:
   * **ArtTimeCode** ArtTimeCode event catch
   * **ArtDMX** ArtDMX event catch
 
-  * **onConnect** Server has binding address
   * **onTerminate** Server is die and disconnected
+  * **onConnect** Server has binding address
 
 Currently supported protocols are:
   * **Broadcast** Broadcast protocol (100%)
