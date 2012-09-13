@@ -1,8 +1,6 @@
 ArtNetStack
 ===========
 
-WARNING : Unstable version
-
 Art-Net by Artistic Licence allows for broadcasting DMX data via IP/UDP.
 This library is implementing the basic protocol for Java applications.
 
@@ -12,7 +10,7 @@ Currently supported core features are:
   * **ArtPoll** Encode and Decode ArtPoll Packet
   * **ArtPollReply** Encode ArtPollReply
   * **ArtTimeCode** Encode and Decode ArtTimeCode
-  * **ArtDMX** Decode ArtDMX
+  * **ArtDMX** Encode and Decode ArtDMX
 
 Currently supported events features are:
   * **Art** ArtNet packet event catch

@@ -32,22 +32,22 @@ public final class OpCodeConstants {
 	 * This is an ArtPoll packet,
 	 * no other data is contained in this UDP packet.
 	 */
-	public static final String OPPOLL = "0020";
+	public static final int OPPOLL = 2000;
 
 	/**
 	 * This is an ArtPollReply packet,.
 	 */
-	public static final String OPPOLLREPLY = "0021";
+	public static final int OPPOLLREPLY = 2100;
 
 	/**
 	 * This is an ArtTimeCode packet.
 	 * It is used to transport time code over the network.
 	 */
-	public static final String OPTIMECODE = "00)7";
+	public static final int OPTIMECODE = 9700;
 
 	/**
 	 * This is an ArtDMX packet.
 	 * It is used to transport DMX over the network.
 	 */
-	public static final String OPOUTPUT = "0050";
+	public static final int OPOUTPUT = 5000;
 }

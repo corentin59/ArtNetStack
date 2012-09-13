@@ -125,8 +125,7 @@ public class ArtTimeCode extends ArtNetObject {
 		sb.append("f(").append(frameTime).append(") ").
 		append("s(").append(seconds).append(") ").
 		append("m(").append(minutes).append(") ").
-		append("h(").append(hours).append(")").
-		append(" ").append(artTimeCodeType.name());
+		append("h(").append(hours).append(")");
 		return sb.toString();
 	}
 }

@@ -59,7 +59,10 @@ public class ArtNetPacketDecoder {
 		// Set generals infos
 		final String hexaBrut = byteArrayToHex(packet);
 		final String id = new String(packet, 0, 7);
-		final String opCode = hexaBrut.substring(16, 20);
+		
+		// Extract OpCode
+		int opCode = ((packet[9] & 0xFF) << 8) | (packet[8] & 0xFF);
+		opCode = Integer.parseInt(Integer.toHexString(opCode));
 
 		// Yes, it's a ArtNetPacket
 		if (!"Art-Net".equals(id)) {
@@ -70,7 +73,7 @@ public class ArtNetPacketDecoder {
 		 * Dicover the type of the packet.
 		 * Please refer to OpcodeTable.
 		 */
-		if (OpCodeConstants.OPPOLL.equals(opCode)) {
+		if (OpCodeConstants.OPPOLL == opCode) {
 			/*
 			 * ArtPollPacket : This is an ArtPoll packet,
 			 * no other data is contained in this UDP packet
@@ -79,7 +82,7 @@ public class ArtNetPacketDecoder {
 				return null;
 			}
 			return decodeArtPollPacket(packet, hexaBrut);
-		} else if (OpCodeConstants.OPTIMECODE.equals(opCode)) {
+		} else if (OpCodeConstants.OPTIMECODE == opCode) {
 			/*
 			 * ArtTimePacket : OpTimeCode
 			 * This is an ArtTimeCode packet.
@@ -89,10 +92,10 @@ public class ArtNetPacketDecoder {
 				return null;
 			}
 			return decodeArtTimeCodePacket(packet, hexaBrut);
-		} else if (OpCodeConstants.OPPOLLREPLY.equals(opCode)) {
+		} else if (OpCodeConstants.OPPOLLREPLY == opCode) {
 			// ArtPollReply : This is a ArtPollReply packet.
 			return decodeArtPollReplyPacket(packet, hexaBrut, ip);
-		} else if (OpCodeConstants.OPOUTPUT.equals(opCode)) {
+		} else if (OpCodeConstants.OPOUTPUT == opCode) {
 			// ArtDMX
 			return decodeArtDMXPacket(packet, hexaBrut);
 		}

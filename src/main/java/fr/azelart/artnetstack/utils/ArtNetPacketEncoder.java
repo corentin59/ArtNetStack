@@ -40,6 +40,9 @@ public final class ArtNetPacketEncoder {
 
 	/** ArtPollCounter. */
 	private static Integer artPollCounter = 1;
+	
+	/** ArtDmxCounter. */
+	private static Integer artDmxCounter = 1;
 
 	/**
 	 * Private constructor to respect checkstyle and protect class.
@@ -106,6 +109,53 @@ public final class ArtNetPacketEncoder {
 		// Type
 		byteArrayOutputStream.write(ByteUtilsArt.in8toByte(artTimeCode.getArtTimeCodeType().ordinal()));
 
+		return byteArrayOutputStream.toByteArray();
+	}
+	
+	/**
+	 * Encode a ArtDMX packet.
+	 * @param univers is the universe
+	 * @param network is the network
+	 * @param dmx is the 512 DMX parameters
+	 * @throws IOException in error with byte array
+	 * @return the ArtDmxCode in array
+	 */
+	public static byte[] encodeArtDmxPacket(final String univers, final String network, final int dmx[] ) throws IOException {
+		final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+		
+		// Prepare next trame
+		artDmxCounter++;
+		
+		// ID.
+		byteArrayOutputStream.write(ByteUtils.toByta(Constants.ID));
+		byteArrayOutputStream.write(MagicNumbers.MAGIC_NUMBER_ZERO);
+		
+		// OpOutput
+		byteArrayOutputStream.write(ByteUtilsArt.in16toByte(20480));
+
+		// Version
+		byteArrayOutputStream.write(MagicNumbers.MAGIC_NUMBER_ZERO);
+		byteArrayOutputStream.write(new Integer(Constants.ART_NET_VERSION).byteValue());
+		
+		// Sequence
+		byteArrayOutputStream.write(ByteUtilsArt.in8toByte(artDmxCounter));
+		
+		// Physical
+		byteArrayOutputStream.write(MagicNumbers.MAGIC_NUMBER_ZERO);
+		
+		// Net Switch
+		byteArrayOutputStream.write(Integer.parseInt(univers, MagicNumbers.MAGIC_NUMBER_16));
+		byteArrayOutputStream.write(Integer.parseInt(network, MagicNumbers.MAGIC_NUMBER_16));
+		
+		// DMX data Length
+		byteArrayOutputStream.write(Constants.DMX_512_SIZE);
+		
+		byteArrayOutputStream.write(MagicNumbers.MAGIC_NUMBER_ZERO);
+		
+		for(int i : dmx) {
+			byteArrayOutputStream.write(ByteUtilsArt.in8toByte(i));
+		}
+		
 		return byteArrayOutputStream.toByteArray();
 	}
 

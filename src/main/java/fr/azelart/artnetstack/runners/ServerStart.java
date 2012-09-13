@@ -128,6 +128,10 @@ public class ServerStart {
 				public void onArtPoll(ArtPoll artPoll) {
 					try {
 						artNetServer.sendPacket( ArtNetPacketEncoder.encodeArtPollReplyPacket( thisControler, artNetServer.getInetAddress(), artNetServer.getPort() ) );
+						
+						// Send a small packet.
+						final int dmx[] = {255,120,2,255};
+						artNetServer.sendPacket(ArtNetPacketEncoder.encodeArtDmxPacket("A", "1", dmx));
 					} catch (IOException e) {
 						e.printStackTrace();
 					}

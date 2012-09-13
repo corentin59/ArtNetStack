@@ -22,6 +22,9 @@ public final class ByteUtilsArt {
 		//return b[3]<<24 | b[2]<<16 | b[1]<<8 | b[0];
 	}
 	
+	public static int byte4toIn( byte[] b, int offset ) {
+		return (b[offset+3]&0xff)<<8 | (b[offset+2]&0xff)<<8 | (b[offset+1]&0xff)<<8 | (b[offset] & 0xff);
+	}
 	
 	
 	public static boolean bitIsSet( int i, int offset ) {
