@@ -21,6 +21,8 @@ import java.net.UnknownHostException;
 import java.util.HashMap;
 import java.util.Map;
 
+import fr.azelart.artnetstack.constants.Constants;
+import fr.azelart.artnetstack.domain.artaddress.ArtAddress;
 import fr.azelart.artnetstack.domain.artdmx.ArtDMX;
 import fr.azelart.artnetstack.domain.artnet.ArtNetObject;
 import fr.azelart.artnetstack.domain.artpoll.ArtPoll;
@@ -129,8 +131,11 @@ public class ServerStart {
 					try {
 						artNetServer.sendPacket( ArtNetPacketEncoder.encodeArtPollReplyPacket( thisControler, artNetServer.getInetAddress(), artNetServer.getPort() ) );
 						
-						// Send a small packet.
-						final int dmx[] = {255,120,2,255};
+						// Send a random packet.
+						final int dmx[] = new int[512];
+						for(int i=0; i!=Constants.DMX_512_SIZE; i++) {
+							dmx[i] = (int) (Math.random() * 512 + 1);
+						}					
 						artNetServer.sendPacket(ArtNetPacketEncoder.encodeArtDmxPacket("A", "1", dmx));
 					} catch (IOException e) {
 						e.printStackTrace();
@@ -140,20 +145,29 @@ public class ServerStart {
 				/**
 				 * We receive an ArtTimeCode packet.
 				 */
+				@Override
 				public void onArtTimeCode(ArtTimeCode artTimeCode) {
 					System.out.println(artTimeCode);
 				}
 
+				@Override
 				public void onArtPollReply(ArtPollReply artPollReply) {
 					System.out.println( artPollReply );
 				}
 
+				@Override
 				public void onArt(ArtNetObject artNetObject) {
 					System.out.println( artNetObject );
 				}
 
+				@Override
 				public void onArtDMX(ArtDMX artDMX) {
 					System.out.println( artDMX );
+				}
+
+				@Override
+				public void onArtAddress(ArtAddress artAddress) {
+					System.out.println( artAddress );
 				}
 				
 			} );

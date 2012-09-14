@@ -17,6 +17,7 @@ package fr.azelart.artnetstack.listeners;
 
 import java.util.EventListener;
 
+import fr.azelart.artnetstack.domain.artaddress.ArtAddress;
 import fr.azelart.artnetstack.domain.artdmx.ArtDMX;
 import fr.azelart.artnetstack.domain.artnet.ArtNetObject;
 import fr.azelart.artnetstack.domain.artpoll.ArtPoll;
@@ -58,4 +59,10 @@ public interface ArtNetPacketListener extends EventListener {
 	 * @param artDMX is the artDMX packet
 	 */
 	void onArtDMX(ArtDMX artDMX);
+	
+	/**
+	 * We have receive an ArtAddress packet.
+	 * @param artAddress is the ArtAddress packet
+	 */
+	void onArtAddress(ArtAddress artAddress);
 }

@@ -21,6 +21,7 @@ import java.net.UnknownHostException;
 import fr.azelart.artnetstack.constants.Constants;
 import fr.azelart.artnetstack.constants.MagicNumbers;
 import fr.azelart.artnetstack.constants.OpCodeConstants;
+import fr.azelart.artnetstack.domain.artaddress.ArtAddress;
 import fr.azelart.artnetstack.domain.artdmx.ArtDMX;
 import fr.azelart.artnetstack.domain.artnet.ArtNetObject;
 import fr.azelart.artnetstack.domain.artpoll.ArtPoll;
@@ -98,6 +99,9 @@ public class ArtNetPacketDecoder {
 		} else if (OpCodeConstants.OPOUTPUT == opCode) {
 			// ArtDMX
 			return decodeArtDMXPacket(packet, hexaBrut);
+		} else if (OpCodeConstants.ARTADDRESS == opCode) {
+			// ArtAddress
+			return decodeArtAddressPacket(packet, hexaBrut);
 		}
 
 		return artNetObject;
@@ -264,6 +268,23 @@ public class ArtNetPacketDecoder {
 
 		return artDMX;
 	}
+	
+	/**
+	 * Decode an ArtAddress packet, we can only set :
+	 * - Short name
+	 * - Long name
+	 * @param bytes is the packet.
+	 * @param hexaBrut is the packet on hexa format.
+	 * @return an ArtAddress
+	 */
+	private static ArtAddress decodeArtAddressPacket(final byte[] bytes, final String hexaBrut) {
+		final ArtAddress artAddress = new ArtAddress();
+		
+		
+		
+		return artAddress;
+	}
+	
 
 	/**
 	 * Check the version of artnet.

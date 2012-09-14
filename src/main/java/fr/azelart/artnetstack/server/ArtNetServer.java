@@ -28,6 +28,7 @@ import java.util.Enumeration;
 import java.util.List;
 
 import fr.azelart.artnetstack.constants.Constants;
+import fr.azelart.artnetstack.domain.artaddress.ArtAddress;
 import fr.azelart.artnetstack.domain.artdmx.ArtDMX;
 import fr.azelart.artnetstack.domain.artnet.ArtNetObject;
 import fr.azelart.artnetstack.domain.artpoll.ArtPoll;
@@ -143,6 +144,9 @@ public class ArtNetServer extends Thread implements Runnable {
 					} else if (vArtNetObject instanceof ArtDMX) {
 						// ArtDMX
 						fireArtDMXReply((ArtDMX) vArtNetObject);
+					} else if (vArtNetObject instanceof ArtAddress) {
+						// ArtAddress
+						fireArtAddressReply((ArtAddress) vArtNetObject);
 					}
 				}
 			} catch (final Exception e) {
@@ -284,6 +288,16 @@ public class ArtNetServer extends Thread implements Runnable {
 	public final void fireArtDMXReply(final ArtDMX artDMX) {
 		for (final ArtNetPacketListener listener : this.listenersListPacket) {
 			listener.onArtDMX(artDMX);
+		}
+	}
+	
+	/**
+	 * A new ArtAddress incoming.
+	 * @param artAddress is the instance of the artAddress pakcet
+	 */
+	public final void fireArtAddressReply(final ArtAddress artAddress) {
+		for (final ArtNetPacketListener listener : this.listenersListPacket) {
+			listener.onArtAddress(artAddress);
 		}
 	}
 

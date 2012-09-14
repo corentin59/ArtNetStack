@@ -39,6 +39,15 @@ public final class ByteUtilsArt {
 		return new byte[] {(byte)((data >> 0) & 0xff),(byte)((data >> 8) & 0xff)};
 	}
 	
+	/**
+	 * New method to convert integer to 2*8 bit.
+	 * @param data is number.
+	 * @return the byte array.
+	 */
+	public static byte[] in16toBit( int data ) {
+		return new byte[] {(byte)(data >>> 8),(byte)data};
+	}
+	
 	public static byte[] hexStringToByteArray(String s) {
 	    int len = s.length();
 	    byte[] data = new byte[len / 2];

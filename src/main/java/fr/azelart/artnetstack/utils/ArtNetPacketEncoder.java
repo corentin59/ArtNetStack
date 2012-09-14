@@ -134,8 +134,8 @@ public final class ArtNetPacketEncoder {
 		byteArrayOutputStream.write(ByteUtilsArt.in16toByte(20480));
 
 		// Version
-		byteArrayOutputStream.write(MagicNumbers.MAGIC_NUMBER_ZERO);
 		byteArrayOutputStream.write(new Integer(Constants.ART_NET_VERSION).byteValue());
+		byteArrayOutputStream.write(MagicNumbers.MAGIC_NUMBER_ZERO);
 		
 		// Sequence
 		byteArrayOutputStream.write(ByteUtilsArt.in8toByte(artDmxCounter));
@@ -148,12 +148,16 @@ public final class ArtNetPacketEncoder {
 		byteArrayOutputStream.write(Integer.parseInt(network, MagicNumbers.MAGIC_NUMBER_16));
 		
 		// DMX data Length
-		byteArrayOutputStream.write(Constants.DMX_512_SIZE);
+		byteArrayOutputStream.write(ByteUtilsArt.in16toBit(dmx.length));
 		
-		byteArrayOutputStream.write(MagicNumbers.MAGIC_NUMBER_ZERO);
-		
-		for(int i : dmx) {
-			byteArrayOutputStream.write(ByteUtilsArt.in8toByte(i));
+		byte bdmx;
+		for(int i=0; i!=Constants.DMX_512_SIZE; i++) {
+			if(dmx.length>i) {
+				bdmx = (byte) dmx[i];
+				byteArrayOutputStream.write(ByteUtilsArt.in8toByte(bdmx));
+			} else {
+				byteArrayOutputStream.write(ByteUtilsArt.in8toByte(MagicNumbers.MAGIC_NUMBER_ZERO));
+			}
 		}
 		
 		return byteArrayOutputStream.toByteArray();

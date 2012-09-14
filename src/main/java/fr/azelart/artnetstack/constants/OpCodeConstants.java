@@ -50,4 +50,10 @@ public final class OpCodeConstants {
 	 * It is used to transport DMX over the network.
 	 */
 	public static final int OPOUTPUT = 5000;
+
+	/**
+	 * This is an ArtAddress packet.
+	 * It contains remote programming information for a Node.
+	 */
+	public static final int ARTADDRESS = 6000;
 }
