@@ -85,15 +85,24 @@ public class ArtPollReply extends ArtNetObject {
 	 */
 	private ArtPollReplyStyle artPollReplyStyle;
 
-	/**
-	 * toString.
-	 * @return a representation of this packet
-	 */
 	@Override
-	public final String toString() {
-		final StringBuilder sb = new StringBuilder();
-		sb.append("ArtPollReply[ip=").append(ip).append(",longName").append(longName).append("]");
-		return sb.toString();
+	public String toString() {
+		return "ArtPollReply{" +
+			"ip='" + ip + '\'' +
+			", port=" + port +
+			", versionH=" + versionH +
+			", versionL=" + versionL +
+			", oemHexa='" + oemHexa + '\'' +
+			", ubeaVersion=" + ubeaVersion +
+			", artPollReplyStatus=" + artPollReplyStatus +
+			", subNet='" + subNet + '\'' +
+			", subSwitch='" + subSwitch + '\'' +
+			", physicalIp='" + physicalIp + '\'' +
+			", esta='" + esta + '\'' +
+			", shortName='" + shortName + '\'' +
+			", longName='" + longName + '\'' +
+			", artPollReplyStyle=" + artPollReplyStyle +
+			'}';
 	}
 
 	/**

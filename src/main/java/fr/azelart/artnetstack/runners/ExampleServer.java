@@ -15,12 +15,6 @@
  */
 package fr.azelart.artnetstack.runners;
 
-import java.io.IOException;
-import java.net.SocketException;
-import java.net.UnknownHostException;
-import java.util.HashMap;
-import java.util.Map;
-
 import fr.azelart.artnetstack.constants.Constants;
 import fr.azelart.artnetstack.domain.artaddress.ArtAddress;
 import fr.azelart.artnetstack.domain.artdmx.ArtDMX;
@@ -37,15 +31,20 @@ import fr.azelart.artnetstack.domain.enums.PortTypeEnum;
 import fr.azelart.artnetstack.listeners.ArtNetPacketListener;
 import fr.azelart.artnetstack.listeners.ServerListener;
 import fr.azelart.artnetstack.server.ArtNetServer;
-import fr.azelart.artnetstack.utils.ArtNetPacketEncoder;
+
+import java.io.IOException;
+import java.net.InetAddress;
+import java.net.SocketException;
+import java.net.UnknownHostException;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Server Runner.
  * @author Corentin Azelart
  *
  */
-public class ServerStart {
-	
+public class ExampleServer {
 	private static Controller thisControler;
 	
 	private static void createControler() {
@@ -60,7 +59,7 @@ public class ServerStart {
 		vPort1.setType( PortTypeEnum.DMX512 );
 		vPort1.setDirection( PortInputOutputEnum.BOTH );
 		vPorts.put(0, vPort1);
-		
+
 		// Set status port1 input
 		final Map<Integer,ControllerGoodInput> vGoodInputsMap = new HashMap<Integer, ControllerGoodInput>();
 		ControllerGoodInput vGoodInput1 = new ControllerGoodInput();
@@ -71,7 +70,7 @@ public class ServerStart {
 		vGoodInput1.setIncludeDMXTextPackets( true );
 		vGoodInput1.setReceivedDataError( false );
 		vGoodInputsMap.put(0, vGoodInput1);
-		
+
 		// Set status port1 output
 		final Map<Integer,ControllerGoodOutput> vGoodOutputsMap = new HashMap<Integer, ControllerGoodOutput>();
 		ControllerGoodOutput vGoodOutput1 = new ControllerGoodOutput();
@@ -86,31 +85,34 @@ public class ServerStart {
 		
 		// Display
 		thisControler.setScreen( false );
-		
+
 		thisControler.setGoodOutputMapping( vGoodOutputsMap );
 		thisControler.setGoodInputMapping(vGoodInputsMap);
 		thisControler.setPortTypeMap(vPorts);
 		
 		// Network
-		thisControler.setNetwork("00");
-		thisControler.setSubNetwork("D");
+		thisControler.setNetwork(0x00);
+		thisControler.setSubNetwork(0x0D);
 	}
 	
 	/**
 	 * Start program method.
 	 * @param args
 	 */
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IOException {
 		final ArtNetServer artNetServer;
 		createControler();
 		
 		
 		try {
-			artNetServer = new ArtNetServer();
+			artNetServer = new ArtNetServer(
+				InetAddress.getLocalHost(),
+				InetAddress.getLocalHost(),
+				Constants.DEFAULT_ART_NET_UDP_PORT
+			);
 			
 			// Server listener
 			artNetServer.addListenerServer( new ServerListener() {
-				
 				public void onConnect() {
 					System.out.println("Connected");
 				}
@@ -128,18 +130,7 @@ public class ServerStart {
 				 * We receive an ArtPoll packet.
 				 */
 				public void onArtPoll(ArtPoll artPoll) {
-					try {
-						artNetServer.sendPacket( ArtNetPacketEncoder.encodeArtPollReplyPacket( thisControler, artNetServer.getInetAddress(), artNetServer.getPort() ) );
-						
-						// Send a random packet.
-						final int dmx[] = new int[512];
-						for(int i=0; i!=Constants.DMX_512_SIZE; i++) {
-							dmx[i] = (int) (Math.random() * 512 + 1);
-						}					
-						artNetServer.sendPacket(ArtNetPacketEncoder.encodeArtDmxPacket("A", "1", dmx));
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
+					System.out.println(artPoll);
 				}
 
 				/**
@@ -152,7 +143,7 @@ public class ServerStart {
 
 				@Override
 				public void onArtPollReply(ArtPollReply artPollReply) {
-					System.out.println( artPollReply );
+					System.out.println(artPollReply);
 				}
 
 				@Override
@@ -169,12 +160,10 @@ public class ServerStart {
 				public void onArtAddress(ArtAddress artAddress) {
 					System.out.println( artAddress );
 				}
-				
 			} );
 			
 			artNetServer.start();
-			
-			
+
 			/**
 			 * Configure a time code for example.
 			 */

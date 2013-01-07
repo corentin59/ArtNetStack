@@ -15,18 +15,6 @@
  */
 package fr.azelart.artnetstack.server;
 
-import java.io.IOException;
-import java.net.DatagramPacket;
-import java.net.DatagramSocket;
-import java.net.InetAddress;
-import java.net.InterfaceAddress;
-import java.net.NetworkInterface;
-import java.net.SocketException;
-import java.net.UnknownHostException;
-import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.List;
-
 import fr.azelart.artnetstack.constants.Constants;
 import fr.azelart.artnetstack.domain.artaddress.ArtAddress;
 import fr.azelart.artnetstack.domain.artdmx.ArtDMX;
@@ -37,6 +25,19 @@ import fr.azelart.artnetstack.domain.arttimecode.ArtTimeCode;
 import fr.azelart.artnetstack.listeners.ArtNetPacketListener;
 import fr.azelart.artnetstack.listeners.ServerListener;
 import fr.azelart.artnetstack.utils.ArtNetPacketDecoder;
+
+import java.io.IOException;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.InetAddress;
+import java.net.InterfaceAddress;
+import java.net.MulticastSocket;
+import java.net.NetworkInterface;
+import java.net.SocketException;
+import java.net.UnknownHostException;
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.List;
 
 /**
  * A Thread for the server.
@@ -61,14 +62,14 @@ public class ArtNetServer extends Thread implements Runnable {
 	private final List<ServerListener> listenersListServer;
 
 	/**
-	 * IP Server.
+	 * Broadcast IP.
 	 */
-	private InetAddress inetAddress = null;
+	private InetAddress listenAddress;
 
 	/**
 	 * Broadcast IP.
 	 */
-	private InetAddress inetAddressBroadcast = null;
+	private InetAddress broadcastAddress;
 
 	/**
 	 * Port.
@@ -81,28 +82,33 @@ public class ArtNetServer extends Thread implements Runnable {
 	private boolean running = false;
 
 	/**
-	 * Constructor.
-	 * @throws UnknownHostException if we can't find the host.
-	 * @throws SocketException if socket error
+	 * Creates an ArtNet server for the given addresses.
+	 *
+	 * @param listenAddress The address to bind the receiving socket to. {@code null} will bind to the local wildcard
+	 *                      address (0.0.0.0).
+	 *
+	 * @param broadcastAddress The address to send ArtNet packets to, either a specific IP or the broadcast address
+	 *                         for the interface connected to other nodes. Use {@link #broadcastAddressFor(java.net.InetAddress)}
+	 *                         to determine the broadcast address associated with a local ip.
+	 *
+	 * @param port The UDP port to send packets to. The default ArtNet port is {@value Constants#DEFAULT_ART_NET_UDP_PORT}.
+	 *
+	 * @throws SocketException
+	 * @throws UnknownHostException
 	 */
-	public ArtNetServer() throws UnknownHostException, SocketException {
-		this(InetAddress.getByName(Constants.SERVER_IP), Constants.SERVER_PORT);
-	}
+	public ArtNetServer(
+		final InetAddress listenAddress,
+		final InetAddress broadcastAddress,
+		final int port
+	) throws IOException {
+		this.port = port;
+		this.listenAddress = listenAddress;
+		this.broadcastAddress = broadcastAddress;
 
-	/**
-	 * Constructor of server.
-	 * @param inetAddress is the address informations
-	 * @param port is the port
-	 * @throws SocketException if socket error
-	 * @throws UnknownHostException if we can't find the host.
-	 */
-	public ArtNetServer(final InetAddress inetAddress, final int port) throws SocketException, UnknownHostException {
 		listenersListPacket = new ArrayList<ArtNetPacketListener>();
 		listenersListServer = new ArrayList<ServerListener>();
-		datagramSocket = new DatagramSocket(port);
-		this.port = port;
-		this.inetAddress = inetAddress;
-		inetAddressBroadcast = getBroadcast(this.inetAddress);
+
+		datagramSocket = new MulticastSocket(port);
 	}
 
 	/**
@@ -157,24 +163,35 @@ public class ArtNetServer extends Thread implements Runnable {
 	}
 
 	/**
-	 * Get Broadcast Ip.
-	 * @param inetAddress is address informations
-	 * @return broadcast ip.
-	 * @throws SocketException in error when searching broadcast address
+	 * Determines the broadcast address used by the interface which owns the given ip address. The given IP must
+	 * be one representing the local machine.
+	 *
+	 * @param inetAddress The address
+	 * @return The broadcast address for the interface owning the given address
+	 * @throws SocketException
 	 */
-	private static InetAddress getBroadcast(final InetAddress inetAddress) throws SocketException {
-		final Enumeration<NetworkInterface> interfaces = NetworkInterface.getNetworkInterfaces();
-		NetworkInterface networkInterface = null;
-		while (interfaces.hasMoreElements()) {
-			networkInterface = interfaces.nextElement();
+	public static InetAddress broadcastAddressFor(final InetAddress inetAddress) throws SocketException {
+		final Enumeration<NetworkInterface> allInterfaces = NetworkInterface.getNetworkInterfaces();
+
+		while (allInterfaces.hasMoreElements()) {
+			final NetworkInterface networkInterface = allInterfaces.nextElement();
+
 			for (final InterfaceAddress interfaceAddress : networkInterface.getInterfaceAddresses()) {
 				if (interfaceAddress.getAddress().getHostAddress().equals(inetAddress.getHostAddress())) {
+
+					if (interfaceAddress.getBroadcast() == null) {
+						throw new IllegalArgumentException(
+							"Broadcast address for " + networkInterface + ", which owns " + inetAddress + " is null. " +
+								"Try a different interface."
+						);
+					}
+
 					return interfaceAddress.getBroadcast();
 				}
 			}
-
 		}
-		return null;
+
+		throw new IllegalArgumentException("No interface has address " + inetAddress);
 	}
 
 	/**
@@ -202,7 +219,12 @@ public class ArtNetServer extends Thread implements Runnable {
 	 */
 	public final void sendPacket(  byte[] bytes ) throws IOException {
 		if(datagramSocket!=null) {
-			final DatagramPacket packet = new DatagramPacket(bytes, bytes.length, inetAddressBroadcast, Constants.SERVER_PORT);
+			final DatagramPacket packet = new DatagramPacket(
+				bytes,
+				bytes.length,
+				broadcastAddress,
+				port
+			);
 			datagramSocket.send( packet );
 		}
 	}
@@ -300,21 +322,6 @@ public class ArtNetServer extends Thread implements Runnable {
 			listener.onArtAddress(artAddress);
 		}
 	}
-
-	/**
-	 * @return the inetAddress
-	 */
-	public final InetAddress getInetAddress() {
-		return inetAddress;
-	}
-
-	/**
-	 * @param inetAddress the inetAddress to set
-	 */
-	public final void setInetAddress(final InetAddress inetAddress) {
-		this.inetAddress = inetAddress;
-	}
-
 
 	/**
 	 * @return the port

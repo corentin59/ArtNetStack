@@ -15,9 +15,9 @@
  */
 package fr.azelart.artnetstack.domain.controller;
 
-import java.util.Map;
-
 import fr.azelart.artnetstack.domain.artnet.ArtNetObject;
+
+import java.util.Map;
 
 /**
  * General controler.
@@ -41,14 +41,14 @@ public class Controller extends ArtNetObject {
 	private Boolean screen;
 
 	/**
-	 * Network.
+	 * Network identifier, 0-255.
 	 */
-	private String network;
+	private int network = 0x00;
 
 	/**
-	 * Subnetwork.
+	 * Subnetwork identifier, 0-255.
 	 */
-	private String subNetwork;
+	private int subNetwork = 0x0D;
 
 	/**
 	 * @return the goodInputMapping
@@ -118,28 +118,28 @@ public class Controller extends ArtNetObject {
 	/**
 	 * @return the network
 	 */
-	public String getNetwork() {
+	public int getNetwork() {
 		return network;
 	}
 
 	/**
 	 * @param network the network to set
 	 */
-	public void setNetwork(final String network) {
+	public void setNetwork(final int network) {
 		this.network = network;
 	}
 
 	/**
 	 * @return the subNetwork
 	 */
-	public String getSubNetwork() {
+	public int getSubNetwork() {
 		return subNetwork;
 	}
 
 	/**
 	 * @param subNetwork the subNetwork to set
 	 */
-	public void setSubNetwork(final String subNetwork) {
+	public void setSubNetwork(final int subNetwork) {
 		this.subNetwork = subNetwork;
 	}
 }
