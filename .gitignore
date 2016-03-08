@@ -3,10 +3,9 @@
 .settings
 .checkstyle
 target
-*.class
 
 # Package Files #
-*.jar
 *.war
 *.ear
 atlassian-ide-plugin.xml
+build
