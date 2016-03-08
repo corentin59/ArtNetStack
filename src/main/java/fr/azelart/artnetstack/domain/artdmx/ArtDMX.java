@@ -54,7 +54,7 @@ public class ArtDMX extends ArtNetObject {
 
 	/**
 	 * The length of the DMX512 data array. This value
-	 * should be an even number in the range 2 – 512.
+	 * should be an even number in the range 2 - 512.
 	 * It represents the number of DMX512 channels encoded
 	 * in packet. NB: Products which convert Art-Net to
 	 * DMX512 may opt to always send 512 channels.
