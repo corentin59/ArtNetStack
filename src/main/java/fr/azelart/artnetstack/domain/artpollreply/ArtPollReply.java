@@ -85,6 +85,17 @@ public class ArtPollReply extends ArtNetObject {
 	 */
 	private ArtPollReplyStyle artPollReplyStyle;
 
+	/**
+	 * Array of the four output subswitch ports
+	 * on the artnet node.
+	 */
+	private int[] outputSubswitch = new int[4];
+
+	/**
+	 * Array of the four output statuses
+	 */
+	private ArtPollReplyOutputPortStatus[] outputStatus = new ArtPollReplyOutputPortStatus[4];
+
 	@Override
 	public String toString() {
 		return "ArtPollReply{" +
@@ -294,5 +305,21 @@ public class ArtPollReply extends ArtNetObject {
 	 */
 	public final void setPhysicalIp(final String physicalIp) {
 		this.physicalIp = physicalIp;
+	}
+
+	public int[] getOutputSubswitch() {
+		return outputSubswitch;
+	}
+
+	public void setOutputSubswitch(int[] outputSubswitch) {
+		this.outputSubswitch = outputSubswitch;
+	}
+
+	public ArtPollReplyOutputPortStatus[] getOutputStatus() {
+		return outputStatus;
+	}
+
+	public void setOutputStatus(ArtPollReplyOutputPortStatus[] outputStatus) {
+		this.outputStatus = outputStatus;
 	}
 }
