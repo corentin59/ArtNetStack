@@ -9,3 +9,5 @@ target
 *.ear
 atlassian-ide-plugin.xml
 build
+*.iml
+.*/
