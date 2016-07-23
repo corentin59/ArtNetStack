@@ -1,6 +1,7 @@
 package fr.azelart.artnetstack.utils;
 
-import org.junit.Assert;
+import junit.framework.Assert;
+
 import org.junit.Test;
 
 import java.util.Arrays;
