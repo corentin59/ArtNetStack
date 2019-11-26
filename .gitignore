@@ -4,6 +4,7 @@
 .checkstyle
 target
 *.class
+.idea
 
 # Package Files #
 *.jar
