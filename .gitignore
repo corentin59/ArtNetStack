@@ -4,8 +4,13 @@
 .checkstyle
 target
 *.class
+.idea
 
 # Package Files #
 *.jar
 *.war
 *.ear
+atlassian-ide-plugin.xml
+build
+*.iml
+.*/

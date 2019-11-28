@@ -139,4 +139,14 @@ public final class MagicNumbers {
 	/** Magic number 64. */
 	public static final int MAGIC_NUMBER_64 = 64;
 
+	public static final int OUTPUT_SUBSWITCH_PORT_1 = 190;
+	public static final int OUTPUT_SUBSWITCH_PORT_2 = 191;
+	public static final int OUTPUT_SUBSWITCH_PORT_3 = 192;
+	public static final int OUTPUT_SUBSWITCH_PORT_4 = 193;
+
+	public static final int OUTPUT_PORT_STATUS_1 = 182;
+	public static final int OUTPUT_PORT_STATUS_2 = 183;
+	public static final int OUTPUT_PORT_STATUS_3 = 184;
+	public static final int OUTPUT_PORT_STATUS_4 = 185;
+
 }

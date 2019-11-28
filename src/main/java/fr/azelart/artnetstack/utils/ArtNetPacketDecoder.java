@@ -26,6 +26,7 @@ import fr.azelart.artnetstack.domain.artdmx.ArtDMX;
 import fr.azelart.artnetstack.domain.artnet.ArtNetObject;
 import fr.azelart.artnetstack.domain.artpoll.ArtPoll;
 import fr.azelart.artnetstack.domain.artpollreply.ArtPollReply;
+import fr.azelart.artnetstack.domain.artpollreply.ArtPollReplyOutputPortStatus;
 import fr.azelart.artnetstack.domain.artpollreply.ArtPollReplyStatus;
 import fr.azelart.artnetstack.domain.arttimecode.ArtTimeCode;
 import fr.azelart.artnetstack.domain.arttimecode.ArtTimeCodeType;
@@ -182,6 +183,20 @@ public class ArtNetPacketDecoder {
 
 		// Long Name
 		artPollReply.setLongName(new String(bytes, MagicNumbers.MAGIC_NUMBER_44, MagicNumbers.MAGIC_NUMBER_64));
+
+		// Port Output Subswitchs
+		artPollReply.setOutputSubswitch(new int[]{
+				bytes[MagicNumbers.OUTPUT_SUBSWITCH_PORT_1],
+				bytes[MagicNumbers.OUTPUT_SUBSWITCH_PORT_2],
+				bytes[MagicNumbers.OUTPUT_SUBSWITCH_PORT_3],
+				bytes[MagicNumbers.OUTPUT_SUBSWITCH_PORT_4]});
+
+		// Port Output Subswitchs
+		artPollReply.setOutputStatus(new ArtPollReplyOutputPortStatus[]{
+				new ArtPollReplyOutputPortStatus(bytes[MagicNumbers.OUTPUT_PORT_STATUS_1]),
+				new ArtPollReplyOutputPortStatus(bytes[MagicNumbers.OUTPUT_PORT_STATUS_2]),
+				new ArtPollReplyOutputPortStatus(bytes[MagicNumbers.OUTPUT_PORT_STATUS_3]),
+				new ArtPollReplyOutputPortStatus(bytes[MagicNumbers.OUTPUT_PORT_STATUS_4])});
 
 		// Real ip
 		artPollReply.setPhysicalIp(ip.getHostAddress());

@@ -116,4 +116,15 @@ public class ArtPollReplyStatus {
 	public final void setIndicatorState(final IndicatorStateEnum indicatorState) {
 		this.indicatorState = indicatorState;
 	}
+
+	@Override
+	public String toString() {
+		return "ArtPollReplyStatus{" +
+			"ubeaPresent=" + ubeaPresent +
+			", rdmCapable=" + rdmCapable +
+			", bootRom=" + bootRom +
+			", programmingAuthority=" + programmingAuthority +
+			", indicatorState=" + indicatorState +
+			'}';
+	}
 }

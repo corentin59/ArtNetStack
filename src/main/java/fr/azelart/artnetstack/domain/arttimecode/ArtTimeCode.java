@@ -24,7 +24,7 @@ import fr.azelart.artnetstack.domain.artnet.ArtNetObject;
  */
 public class ArtTimeCode extends ArtNetObject {
 
-	/** Frames time. 0 – 29 depending on mode. */
+	/** Frames time. 0 - 29 depending on mode. */
 	private int frameTime;
 
 	/** Seconds. 0 - 59. */

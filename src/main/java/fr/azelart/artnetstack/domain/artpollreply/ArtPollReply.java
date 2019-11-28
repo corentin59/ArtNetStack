@@ -86,14 +86,34 @@ public class ArtPollReply extends ArtNetObject {
 	private ArtPollReplyStyle artPollReplyStyle;
 
 	/**
-	 * toString.
-	 * @return a representation of this packet
+	 * Array of the four output subswitch ports
+	 * on the artnet node.
 	 */
+	private int[] outputSubswitch = new int[4];
+
+	/**
+	 * Array of the four output statuses
+	 */
+	private ArtPollReplyOutputPortStatus[] outputStatus = new ArtPollReplyOutputPortStatus[4];
+
 	@Override
-	public final String toString() {
-		final StringBuilder sb = new StringBuilder();
-		sb.append("ArtPollReply[ip=").append(ip).append(",longName").append(longName).append("]");
-		return sb.toString();
+	public String toString() {
+		return "ArtPollReply{" +
+			"ip='" + ip + '\'' +
+			", port=" + port +
+			", versionH=" + versionH +
+			", versionL=" + versionL +
+			", oemHexa='" + oemHexa + '\'' +
+			", ubeaVersion=" + ubeaVersion +
+			", artPollReplyStatus=" + artPollReplyStatus +
+			", subNet='" + subNet + '\'' +
+			", subSwitch='" + subSwitch + '\'' +
+			", physicalIp='" + physicalIp + '\'' +
+			", esta='" + esta + '\'' +
+			", shortName='" + shortName + '\'' +
+			", longName='" + longName + '\'' +
+			", artPollReplyStyle=" + artPollReplyStyle +
+			'}';
 	}
 
 	/**
@@ -285,5 +305,21 @@ public class ArtPollReply extends ArtNetObject {
 	 */
 	public final void setPhysicalIp(final String physicalIp) {
 		this.physicalIp = physicalIp;
+	}
+
+	public int[] getOutputSubswitch() {
+		return outputSubswitch;
+	}
+
+	public void setOutputSubswitch(int[] outputSubswitch) {
+		this.outputSubswitch = outputSubswitch;
+	}
+
+	public ArtPollReplyOutputPortStatus[] getOutputStatus() {
+		return outputStatus;
+	}
+
+	public void setOutputStatus(ArtPollReplyOutputPortStatus[] outputStatus) {
+		this.outputStatus = outputStatus;
 	}
 }

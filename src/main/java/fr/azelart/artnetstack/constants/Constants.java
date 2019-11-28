@@ -30,10 +30,7 @@ public final class Constants {
 	}
 
 	/** Server port. */
-	public static final short SERVER_PORT = 0x1936;
-
-	/** IP Adress. */
-	public static final String SERVER_IP = "192.168.1.17";
+	public static final short DEFAULT_ART_NET_UDP_PORT = 6454;
 
 	/** Version 14. */
 	public static final int ART_NET_VERSION = 14;
@@ -51,7 +48,7 @@ public final class Constants {
 	public static final String SHORT_NAME = "ArtNetStack 0.001";
 
 	/** Long Name. */
-	public static final String LONG_NAME = "ArtNetStack 1.001 - More Informations : corentin@azelart.fr";
+	public static final String LONG_NAME = "ArtNetStack 1.001";
 
 	/** Max Ports (4 in protocol specification). */
 	public static final int MAX_PORT = 4;
